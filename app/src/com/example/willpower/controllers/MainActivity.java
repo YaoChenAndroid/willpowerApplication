@@ -1,4 +1,6 @@
-package com.example.willpower;
+package com.example.willpower.controllers;
+
+import com.example.willpower.controllers.R;
 
 import android.os.Bundle;
 import android.app.Activity;
