@@ -13,7 +13,7 @@
        android:paddingBottom="20dp" >
 
         <ImageButton
-            android:id="@+id/ImageButton01"
+            android:id="@+id/ImageButtonGame1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -22,7 +22,7 @@
             android:background="#00000044" />
 
         <ImageButton
-            android:id="@+id/imageButton1"
+            android:id="@+id/ImageButtonGame2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -39,7 +39,7 @@
             android:paddingBottom="100dp" >
 
             <ImageButton
-                android:id="@+id/ImageButton03"
+                android:id="@+id/ImageButtonGame3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -48,7 +48,7 @@
                 android:background="#00000044" />
 
             <ImageButton
-                android:id="@+id/ImageButton02"
+                android:id="@+id/ImageButtonGame4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
