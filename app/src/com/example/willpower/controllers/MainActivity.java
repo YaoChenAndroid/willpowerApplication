@@ -62,7 +62,6 @@ public class MainActivity extends Activity {
 		ib2.setOnTouchListener(onTouchListener);
 		ib3.setOnTouchListener(onTouchListener);
 		ib4.setOnTouchListener(onTouchListener);
-
 		ib1.setOnClickListener(new View.OnClickListener() {
 			@Override
 			//Yuxin Override this method
