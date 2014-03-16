@@ -17,7 +17,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		//setupUI();
+		setupUI();
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class MainActivity extends Activity {
 		ib2=(ImageButton) findViewById(R.id.ImageButtonGame2);
 		ib3=(ImageButton) findViewById(R.id.ImageButtonGame3);
 		ib4=(ImageButton) findViewById(R.id.ImageButtonGame4);
-		View.OnTouchListener onTouchListener=new View.OnTouchListener() {
+		/*View.OnTouchListener onTouchListener=new View.OnTouchListener() {
 			//add touch effect to the imageButtons
 			//refer to the solution from http://stackoverflow.com/questions/4617898/how-can-i-give-imageview-click-effect-like-a-button-in-android
 			@Override
@@ -61,7 +61,7 @@ public class MainActivity extends Activity {
 		ib1.setOnTouchListener(onTouchListener);
 		ib2.setOnTouchListener(onTouchListener);
 		ib3.setOnTouchListener(onTouchListener);
-		ib4.setOnTouchListener(onTouchListener);
+		ib4.setOnTouchListener(onTouchListener);*/
 		ib1.setOnClickListener(new View.OnClickListener() {
 			@Override
 			//Yuxin Override this method
