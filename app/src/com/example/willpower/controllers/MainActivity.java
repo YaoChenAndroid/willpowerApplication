@@ -4,6 +4,7 @@ import com.example.willpower.controllers.R;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
+	public static final int START_TREE_ACTIVITY_ACTION = 2;
 	private ImageButton ib1,ib2,ib3,ib4;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +75,9 @@ public class MainActivity extends Activity {
 			@Override
 			//Lai Override this method
 			public void onClick(View v) {
-				Toast.makeText(MainActivity.this, "Button2 is clicked, please override this method to activate game2Activity", 2000).show();
+				//Toast.makeText(MainActivity.this, "Button2 is clicked, please override this method to activate game2Activity", 2000).show();
+				Intent lai_tree_strategy_intent = new Intent(MainActivity.this, com.example.willpower.lai.controllers.TreeStrategyMainActivity.class);
+				startActivityForResult(lai_tree_strategy_intent, START_TREE_ACTIVITY_ACTION);
 			}
 		});
 		ib3.setOnClickListener(new View.OnClickListener() {
@@ -89,5 +93,13 @@ public class MainActivity extends Activity {
 				Toast.makeText(MainActivity.this, "Button4 is clicked, please override this method to activate game4Activity", 2000).show();
 			}
 		});
+	}
+	
+	/**
+	 * Each button will request some data when user finish their games
+	 */
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
 	}
 }
