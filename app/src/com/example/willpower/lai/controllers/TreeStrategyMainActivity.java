@@ -1,4 +1,8 @@
-package com.example.willpower.controllers;
+package com.example.willpower.lai.controllers;
+
+import com.example.willpower.controllers.R;
+import com.example.willpower.controllers.R.layout;
+import com.example.willpower.controllers.R.menu;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -9,7 +13,7 @@ public class TreeStrategyMainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_tree_strategy_main);
+		setContentView(R.layout.activity_tree_strategy_main_lai);
 	}
 
 	@Override
