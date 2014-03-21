@@ -13,7 +13,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
+	public static final int START_BRAIN_ACTIVITY_ACTION = 1;
 	public static final int START_TREE_ACTIVITY_ACTION = 2;
+	
 	private ImageButton ib1,ib2,ib3,ib4;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +70,9 @@ public class MainActivity extends Activity {
 			@Override
 			//Yuxin Override this method
 			public void onClick(View v) {
-				Toast.makeText(MainActivity.this, "Button1 is clicked, please override this method to activate game1Activity", 2000).show();
+				//Toast.makeText(MainActivity.this, "Button1 is clicked, please override this method to activate game1Activity", 2000).show();
+				Intent yuxin_brain_intent = new Intent(MainActivity.this, com.example.willpower.yuxin.controllers.ColorBrainActivity.class);
+				startActivityForResult(yuxin_brain_intent, START_BRAIN_ACTIVITY_ACTION);
 			}
 		});
 		ib2.setOnClickListener(new View.OnClickListener() {
