@@ -9,5 +9,6 @@
     <string name="tree_strategy_continue">Continue</string>
     <string name="tree_strategy_back_to_main">Back</string>
     <string name="tree_strategy_view_score">View Score</string>
+    <string name="title_activity_tree_strategy_view_score">TreeStrategyViewScoreActivity</string>
 
 </resources>
