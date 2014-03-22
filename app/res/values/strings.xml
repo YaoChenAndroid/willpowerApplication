@@ -9,10 +9,7 @@
     <string name="tree_strategy_continue">Continue</string>
     <string name="tree_strategy_back_to_main">Back</string>
     <string name="tree_strategy_view_score">View Score</string>
-<<<<<<< HEAD
     <string name="title_activity_tree_strategy_view_score">TreeStrategyViewScoreActivity</string>
-=======
     <string name="title_activity_colorbrain_main">welcome to color brain!</string>
->>>>>>> FETCH_HEAD
 
 </resources>
