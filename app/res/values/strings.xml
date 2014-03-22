@@ -11,5 +11,7 @@
     <string name="tree_strategy_view_score">View Score</string>
     <string name="title_activity_tree_strategy_view_score">TreeStrategyViewScoreActivity</string>
     <string name="title_activity_colorbrain_main">welcome to color brain!</string>
+    <string name="title_activity_tree_strategy_game">TreeStrategyGameActivity</string>
+    <string name="title_activity_tree_strategy_spresult">TreeStrategySPResultActivity</string>
 
 </resources>
