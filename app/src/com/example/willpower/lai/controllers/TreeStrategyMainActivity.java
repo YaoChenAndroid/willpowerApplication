@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +26,10 @@ public class TreeStrategyMainActivity extends Activity {
 	private Button mTreeStrategyBackToMain;
 	
 	public static final int START_TREE_ACTIVITY_ACTION = 2;
+	
+	public static final int START_TREE_STRATEGY_NEW_GAME = 21;
+	public static final int START_TREE_STRATEGY_CONTINUE = 22;
+	public static final int START_TREE_STRATEGY_VIEW_SCORE = 23;
 	
 	private Handler mHandler = new Handler();
 	private int mBlink_interval = 1000;
@@ -48,21 +53,12 @@ public class TreeStrategyMainActivity extends Activity {
 		mTreeStrategyViewScore = (Button)findViewById(R.id.tree_strategy_view_score);
 		mTreeStrategyBackToMain = (Button)findViewById(R.id.tree_strategy_back_to_main);
 		
-		mTreeStrategyTitle.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		});
 		mTreeStrategyNewGame.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
+				Intent newGame = new Intent(TreeStrategyMainActivity.this, TreeStrategyGameActivity.class);
+				startActivityForResult(newGame, START_TREE_STRATEGY_NEW_GAME);
 			}
 			
 		});
@@ -70,8 +66,8 @@ public class TreeStrategyMainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
+				Intent continueGame = new Intent(TreeStrategyMainActivity.this, TreeStrategyGameActivity.class);
+				startActivityForResult(continueGame, START_TREE_STRATEGY_CONTINUE);
 			}
 			
 		});
@@ -79,8 +75,8 @@ public class TreeStrategyMainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
+				Intent viewScore = new Intent(TreeStrategyMainActivity.this, TreeStrategyViewScoreActivity.class);
+				startActivityForResult(viewScore, START_TREE_STRATEGY_VIEW_SCORE);
 			}
 			
 		});
@@ -88,8 +84,8 @@ public class TreeStrategyMainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
+				Intent backToMain = new Intent(TreeStrategyMainActivity.this, com.example.willpower.controllers.MainActivity.class);
+				startActivity(backToMain);
 			}
 			
 		});

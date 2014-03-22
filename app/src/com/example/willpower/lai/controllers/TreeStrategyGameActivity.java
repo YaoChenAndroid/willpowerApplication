@@ -5,15 +5,22 @@ import com.example.willpower.controllers.R.layout;
 import com.example.willpower.controllers.R.menu;
 
 import android.os.Bundle;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.view.Menu;
+import android.widget.LinearLayout;
 
 public class TreeStrategyGameActivity extends Activity {
 
+	private LinearLayout mTreeStrategyLinearLayout;
+	
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_tree_strategy_game_lai);
+		mTreeStrategyLinearLayout = (LinearLayout)findViewById(R.id.tree_strategy_game_background);
+		mTreeStrategyLinearLayout.setBackground(getResources().getDrawable(R.drawable.tree_strategy_background));
 	}
 
 	@Override
