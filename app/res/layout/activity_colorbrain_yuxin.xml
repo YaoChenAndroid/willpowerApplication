@@ -7,16 +7,17 @@
     android:background="#8C8C87" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/cbtv1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Yellow"
+        android:textColor="#000000"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_marginTop="20dp"
          />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/cbtv2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="choose the meaning of the word."
@@ -30,13 +31,13 @@
         android:layout_marginTop="30dp" >
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/cbbtn1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#F7F700" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/cbbtn2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#000000"
@@ -45,7 +46,7 @@
              />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/cbbtn3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#ffffff" />
@@ -53,10 +54,54 @@
     </LinearLayout>
 
     <ProgressBar
-        android:id="@+id/progressBar1"
+        android:id="@+id/cbprogressBar1"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp" />
+        android:layout_marginTop="50dp"
+         />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="20dp" >
+
+        <TextView
+            android:id="@+id/cbtv3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Right: "
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/cbtv4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"  >
+
+        <TextView
+            android:id="@+id/cbtv5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Wrong: "
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/cbtv6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </LinearLayout>
 
 </LinearLayout>
