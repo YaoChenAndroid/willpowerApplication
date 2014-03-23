@@ -13,5 +13,6 @@
     <string name="title_activity_colorbrain_main">welcome to color brain!</string>
     <string name="title_activity_tree_strategy_game">TreeStrategyGameActivity</string>
     <string name="title_activity_tree_strategy_spresult">TreeStrategySPResultActivity</string>
+    <string name="title_activity_game_instruction">GameInstructionActivity</string>
 
 </resources>

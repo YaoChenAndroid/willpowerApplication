@@ -42,6 +42,10 @@
             android:name="com.example.willpower.lai.controllers.TreeStrategySPResultActivity"
             android:label="@string/title_activity_tree_strategy_spresult" >
         </activity>
+        <activity
+            android:name="com.example.willpower.lai.controllers.GameInstructionActivity"
+            android:label="@string/title_activity_game_instruction" >
+        </activity>
     </application>
 
 </manifest>
