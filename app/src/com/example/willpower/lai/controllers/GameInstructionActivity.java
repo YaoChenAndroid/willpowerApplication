@@ -18,6 +18,7 @@ public class GameInstructionActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_instruction_lai);
 		mTreeStrategyLinearLayout = (LinearLayout)findViewById(R.id.tree_strategy_game_instruction_background);
+		mTreeStrategyLinearLayout.setBackground(getResources().getDrawable(R.drawable.tree_strategy_background));
 	}
 
 	@Override
