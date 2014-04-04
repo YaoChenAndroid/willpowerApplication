@@ -6,4 +6,43 @@
     android:gravity="center"
     android:orientation="vertical" >
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.81"
+        android:orientation="vertical" >
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="88dp"
+        android:layout_weight="0.03" >
+
+        <Button
+            android:id="@+id/cut_new_tree_lai"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@drawable/axe_icon2_lai" />
+
+        <Button
+            android:id="@+id/plant_new_tree_lai"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@drawable/tree_icon_lai" />
+
+        <Button
+            android:id="@+id/view_current_score_lai"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@drawable/score_icon1_lai" />
+
+        <Button
+            android:id="@+id/save_current_game_lai"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@drawable/save_icon_lai" />
+
+    </LinearLayout>
+
 </LinearLayout>
