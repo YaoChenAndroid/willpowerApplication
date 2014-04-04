@@ -20,15 +20,19 @@ public class shareActivity extends Activity{
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				shareToFacebook();
+				try
+				{
+					Intent temp = new Intent(shareActivity.this, loginFragmentActivity.class);
+					startActivity(temp);
+				}
+				catch(Exception e)
+				{
+					System.out.print(e.getMessage());
+				}
+
 			}
 		});
 
 
-	}
-	private void shareToFacebook()
-	{
-//		startActivity(intent);
-		Intent temp = new Intent(this, loginFragmentActivity.class);
 	}
 }

@@ -1,6 +1,8 @@
 package com.example.willpower.controllers;
 
 import com.example.willpower.controllers.R;
+import com.example.willpower.yao.controllers.loginFragmentActivity;
+import com.example.willpower.yao.controllers.shareActivity;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -94,7 +96,9 @@ public class MainActivity extends Activity {
 			@Override
 			//Yao Override this method
 			public void onClick(View v) {
-				Toast.makeText(MainActivity.this, "Button4 is clicked, please override this method to activate game4Activity", 2000).show();
+				//Toast.makeText(MainActivity.this, "Button4 is clicked, please override this method to activate game4Activity", 2000).show();
+				Intent temp = new Intent(MainActivity.this,shareActivity.class);
+				startActivity(temp);
 			}
 		});
 	}

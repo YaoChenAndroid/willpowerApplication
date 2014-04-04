@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
         <string name="yao_author">yao</string>
+        <string name="yao_social_activity_share">socialShareActivity</string>
+        <string name="yao_social_activity_login">socialFacebookActivity</string>
 </resources>
