@@ -5,4 +5,14 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="app_id">510119485760833</string>
+    <string name="title_activity_tree_strategy_main">TreeStrategyMainActivity</string>
+    <string name="tree_strategy_new_game">New Game</string>
+    <string name="tree_strategy_continue">Continue</string>
+    <string name="tree_strategy_back_to_main">Back</string>
+    <string name="tree_strategy_view_score">View Score</string>
+    <string name="title_activity_tree_strategy_view_score">TreeStrategyViewScoreActivity</string>
+    <string name="title_activity_colorbrain_main">welcome to color brain!</string>
+    <string name="title_activity_tree_strategy_game">TreeStrategyGameActivity</string>
+    <string name="title_activity_tree_strategy_spresult">TreeStrategySPResultActivity</string>
+    <string name="title_activity_game_instruction">GameInstructionActivity</string>
 </resources>
