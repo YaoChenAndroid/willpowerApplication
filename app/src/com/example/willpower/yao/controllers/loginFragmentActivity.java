@@ -33,7 +33,21 @@ public class loginFragmentActivity extends FragmentActivity {
            mainFragment = (MainFragment) getSupportFragmentManager()  
            .findFragmentById(android.R.id.content);  
        }  
+       try
+       {
+    	   PackageInfo info = getPackageManager().getPackageInfo(this.getPackageName(),  PackageManager.GET_SIGNATURES);
 
+    	   for (Signature signature : info.signatures)
+    	       {
+    	           MessageDigest md = MessageDigest.getInstance("SHA");
+    	           md.update(signature.toByteArray());
+    	           Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+    	       }
+       }
+       catch(Exception e)
+       {
+    	   
+       }
 	}
 
 	   @Override  
