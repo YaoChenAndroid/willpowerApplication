@@ -2,6 +2,7 @@ package com.example.willpower.yao.controllers;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,10 +20,15 @@ public class shareActivity extends Activity{
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				
+				shareToFacebook();
 			}
 		});
 
 
+	}
+	private void shareToFacebook()
+	{
+//		startActivity(intent);
+		Intent temp = new Intent(this, loginFragmentActivity.class);
 	}
 }
