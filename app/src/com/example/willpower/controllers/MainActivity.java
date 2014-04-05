@@ -1,8 +1,11 @@
 package com.example.willpower.controllers;
 
 import com.example.willpower.controllers.R;
+import com.example.willpower.models.friendLoc;
 import com.example.willpower.yao.controllers.loginFragmentActivity;
 import com.example.willpower.yao.controllers.shareActivity;
+import com.parse.Parse;
+import com.parse.ParseObject;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -24,6 +27,9 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		setupUI();
+		//connect service, which only can be connenct once
+        Parse.initialize(this, "k67gag0IGiefqnYZHySJmvEiwpEwpi6c1uk5ExUl", "nmRcR7jOVAamqxtL9TmuWA0uBzZoJcJGNYFYVZxz");
+	    ParseObject.registerSubclass(friendLoc.class);
 	}
 
 	@Override
