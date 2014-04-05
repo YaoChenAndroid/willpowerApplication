@@ -41,7 +41,7 @@
             android:id="@+id/save_current_game_lai"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:background="@drawable/save_icon_lai" />
+            android:background="@drawable/save_icon1_lai" />
 
     </LinearLayout>
 
