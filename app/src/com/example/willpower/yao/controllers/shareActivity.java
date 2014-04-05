@@ -4,10 +4,13 @@ package com.example.willpower.yao.controllers;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.example.willpower.controllers.R;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 public class shareActivity extends Activity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,27 @@ public class shareActivity extends Activity{
 			}
 		});
 
+		Button buttonGoogleMap = (Button) findViewById(R.id.buttonGoogleMap);
+		buttonGoogleMap.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				try
+				{
+					if( GooglePlayServicesUtil.isGooglePlayServicesAvailable(shareActivity.this)== ConnectionResult.SUCCESS)
+					{
+						Intent temp = new Intent(shareActivity.this, googleMapActivity.class);
+						startActivity(temp);
+					}
+				}
+				catch(Exception e)
+				{
+					String temp = e.getMessage();
+					Log.e("google", temp);
+				}
 
+			}
+		});
 	}
 }
