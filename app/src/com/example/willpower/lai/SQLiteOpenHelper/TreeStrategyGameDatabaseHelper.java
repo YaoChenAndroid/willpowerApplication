@@ -102,7 +102,7 @@ public class TreeStrategyGameDatabaseHelper extends SQLiteOpenHelper{
 	/**
 	 * here we give a public API, which is used to update current item.
 	 */
-	public void updateTreeGameObject(TreeGameObject tgo) {
+	public void saveTreeGame(TreeGameObject tgo) {
 		clearTreeTables();
 		insertTreeGameObject(tgo);
 	}

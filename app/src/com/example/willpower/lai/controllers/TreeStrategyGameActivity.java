@@ -1,8 +1,7 @@
 package com.example.willpower.lai.controllers;
 
 import com.example.willpower.controllers.R;
-import com.example.willpower.controllers.R.layout;
-import com.example.willpower.controllers.R.menu;
+import com.example.willpower.lai.SQLiteOpenHelper.TreeStrategyGameDatabaseHelper;
 import com.example.willpower.lai.models.TreeGameObject;
 
 import android.os.Bundle;
@@ -18,12 +17,14 @@ import android.widget.Toast;
 
 public class TreeStrategyGameActivity extends Activity implements OnClickListener{
 
-	private TreeGameObject mGameObject; // Currrent game object
+//	private TreeGameObject mGameObject; // Currrent game object
+	private TreeStrategyGameDatabaseHelper helper = new TreeStrategyGameDatabaseHelper(this);
+	
 	private double mCurrentIncreaseRate = 0.1; // Current increase rate
-	private int mStartAcres = 100; // Start tree acres
-	private int mStartCredits = 200; // Start users credits
-	private int mMaintainPerAcre = 1; // start maintain cost
-	private int mValuePerAcre = 20; // value when cutting down the trees
+	private int mCurrentAcres = 100; // Start tree acres
+	private int mCurrentCredits = 200; // Start users credits
+	private int mCurrentMaintainPerAcre = 1; // start maintain cost
+	private int mCurrentValuePerAcre = 20; // value when cutting down the trees
 	private int mCostPerAcre = 30; // costs to plant new trees
 	
 	private Handler treeHandler = new Handler();
@@ -55,8 +56,9 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 	/**
 	 * Init game object
 	 */
-	public void initGameObject() {
-		
+	public TreeGameObject createGameObject() {
+		return new TreeGameObject(mCostPerAcre, mCurrentIncreaseRate, mCurrentAcres,
+				mCurrentCredits, mCurrentMaintainPerAcre, mCurrentValuePerAcre);
 	}
 	
 	@Override
@@ -89,11 +91,11 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 	
 	@Override
 	public void onPause() {
-		
+		helper.saveTreeGame(createGameObject());
 	}
 	
 	@Override
 	public void onStop() {
-		
+		helper.saveTreeGame(createGameObject());
 	}
 }
