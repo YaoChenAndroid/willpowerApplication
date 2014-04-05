@@ -2,7 +2,6 @@ package com.example.willpower.controllers;
 
 import com.example.willpower.controllers.R;
 import com.example.willpower.models.friendLoc;
-import com.example.willpower.yao.controllers.loginFragmentActivity;
 import com.example.willpower.yao.controllers.shareActivity;
 import com.parse.Parse;
 import com.parse.ParseObject;
