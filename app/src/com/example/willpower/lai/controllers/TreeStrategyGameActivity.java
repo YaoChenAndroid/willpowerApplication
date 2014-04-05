@@ -70,20 +70,30 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 	public void onClick(View v) {
 		int viewId = v.getId();
 		if (viewId == R.id.cut_new_tree_lai) {
-			
+			toastAnnounce("cut new trees");
 		} else if (viewId == R.id.plant_new_tree_lai) {
-			
+			toastAnnounce("plant new trees");
 		} else if (viewId == R.id.view_current_score_lai) {
-			
+			toastAnnounce("view current score");
 		} else if (viewId == R.id.save_current_game_lai) {
-			
+			toastAnnounce("save current game");
 		}
 	}
 
 	/**
 	 * toast, makeText function
 	 */
-	public void toastAnnounce(String text, int duration) {
-		Toast.makeText(this, text, duration).show();
+	public void toastAnnounce(String text) {
+		Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+	}
+	
+	@Override
+	public void onPause() {
+		
+	}
+	
+	@Override
+	public void onStop() {
+		
 	}
 }
