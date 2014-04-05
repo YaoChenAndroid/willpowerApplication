@@ -75,7 +75,7 @@ public class TreeGameObject implements Parcelable{
 	}
 	
 	// Some get and set functions
-	public int getCostPerAcres() {
+	public int getCostPerAcre() {
 		return this.mCostPerAcre;
 	}
 	
