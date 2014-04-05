@@ -11,12 +11,17 @@ import android.view.LayoutInflater;
 import android.view.View;  
 import android.view.ViewGroup;  
 import android.widget.Button;
+import android.widget.Toast;
   
+import com.facebook.FacebookException;
+import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Session;  
 import com.facebook.SessionState;  
 import com.facebook.UiLifecycleHelper;  
 import com.facebook.widget.FacebookDialog;
 import com.facebook.widget.LoginButton;  
+import com.facebook.widget.WebDialog;
+import com.facebook.widget.WebDialog.OnCompleteListener;
   
 public class MainFragment extends Fragment {  
     private UiLifecycleHelper uiHelper;  
@@ -68,15 +73,78 @@ public class MainFragment extends Fragment {
 	    }
 	}
 	private void sendRequestDialog() {
-		FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this.getActivity())
+		/*FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this.getActivity())
         .setLink("http://developer.android.com/intl/zh-cn/index.html")
         .setDescription("This is SDK test")
         .setName("name")
         .setCaption("Caption")
         .setPicture("https://lh4.googleusercontent.com/-iJyrkSyGc6U/AAAAAAAAAAI/AAAAAAAAAqE/6Ctt86bBArw/photo.jpg")
         .build();
-		uiHelper.trackPendingDialogCall(shareDialog.present());
+		//uiHelper.trackPendingDialogCall(shareDialog.present());*/
+		publishFeedDialog();
 	}
+	
+	private void publishFeedDialog() {
+	    Bundle params = new Bundle();
+	    params.putString("name", "Facebook SDK for Android");
+	    params.putString("caption", "Build great social apps and get more installs.");
+	    params.putString("description", "The Facebook SDK for Android makes it easier and faster to develop Facebook integrated Android apps.");
+	    params.putString("link", "https://developers.facebook.com/android");
+	    params.putString("picture", "https://raw.github.com/fbsamples/ios-3.x-howtos/master/Images/iossdk_logo.png");
+
+	    WebDialog feedDialog = (
+	        new WebDialog.FeedDialogBuilder(getActivity(),
+	            Session.getActiveSession(),
+	            params).setOnCompleteListener(new OnCompleteListener() {
+
+	            @Override
+	            public void onComplete(Bundle values,
+	                FacebookException error) {
+	                if (error == null) {
+	                    // When the story is posted, echo the success
+	                    // and the post Id.
+	                    final String postId = values.getString("post_id");
+	                    if (postId != null) {
+	                        Toast.makeText(getActivity(),
+	                            "Posted story, id: "+postId,
+	                            Toast.LENGTH_SHORT).show();
+	                    } else {
+	                        // User clicked the Cancel button
+	                        Toast.makeText(getActivity().getApplicationContext(), 
+	                            "Publish cancelled", 
+	                            Toast.LENGTH_SHORT).show();
+	                    }
+	                } else if (error instanceof FacebookOperationCanceledException) {
+	                    // User clicked the "x" button
+	                    Toast.makeText(getActivity().getApplicationContext(), 
+	                        "Publish cancelled", 
+	                        Toast.LENGTH_SHORT).show();
+	                } else {
+	                    // Generic, ex: network error
+	                    Toast.makeText(getActivity().getApplicationContext(), 
+	                        "Error posting story", 
+	                        Toast.LENGTH_SHORT).show();
+	                }
+	            }
+
+	        }).build());
+
+	    		/*WebDialog feedDialog = (
+	    		        new WebDialog.FeedDialogBuilder(getActivity(),
+	    		            Session.getActiveSession(),
+	    		            params))
+	    		        .setOnCompleteListener(new OnCompleteListener(){
+
+							@Override
+							public void onComplete(Bundle values,
+									FacebookException error) {
+								// TODO Auto-generated method stub
+								
+							}})
+	    		        .build();
+	    		feedDialog.setTitle("willpower");*/
+	    		feedDialog.show();
+	}	
 
       
     @Override  
