@@ -1,4 +1,5 @@
 package com.example.willpower.yao.controllers;
+import com.example.willpower.models.dataExchange;
 
 import com.example.willpower.controllers.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -38,5 +39,10 @@ public class googleMapActivity extends Activity{
 
 	        // Zoom in, animating the camera.
 	        map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+	        
+	        dataExchange temp = new dataExchange(this);
+	        String[] data = {"YaoChen", "40.608268", "-73.931750"};
+	        temp.saveData(data, dataExchange.DATA_TYPE_MAP);
+	        
 	}
 }
