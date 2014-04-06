@@ -1,9 +1,12 @@
 package com.example.willpower.yao.controllers;
 import com.example.willpower.controllers.R;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Arrays;  
 
 import android.content.Intent;  
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;  
 import android.support.v4.app.Fragment;  
 import android.util.Log;  
@@ -12,22 +15,19 @@ import android.view.View;
 import android.view.ViewGroup;  
 import android.widget.Button;
 import android.widget.Toast;
-  
-import com.facebook.FacebookException;
-import com.facebook.FacebookOperationCanceledException;
+
+import com.facebook.Request;
+import com.facebook.Response;
 import com.facebook.Session;  
 import com.facebook.SessionState;  
 import com.facebook.UiLifecycleHelper;  
 import com.facebook.widget.FacebookDialog;
 import com.facebook.widget.LoginButton;  
-import com.facebook.widget.WebDialog;
-import com.facebook.widget.WebDialog.OnCompleteListener;
-  
+
 public class MainFragment extends Fragment {  
     private UiLifecycleHelper uiHelper;  
     
     private Button sendRequestButton;
-    
     private Session.StatusCallback callback = new Session.StatusCallback() {  
         @Override  
         public void call(Session session, SessionState state,  
@@ -41,6 +41,7 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);  
         uiHelper = new UiLifecycleHelper(getActivity(), callback);  
         uiHelper.onCreate(savedInstanceState);  
+
     }  
   
     @Override  
@@ -51,14 +52,16 @@ public class MainFragment extends Fragment {
         LoginButton authButton = (LoginButton) view  
                 .findViewById(R.id.login_button);  
         authButton.setFragment(this);  
-        authButton.setReadPermissions(Arrays  
-                .asList("email","user_likes", "user_status"));
-        
+//        authButton.setReadPermissions(Arrays  
+//                .asList("email","user_likes", "user_status"));
+        authButton.setPublishPermissions(Arrays  
+                .asList("publish_actions", "publish_stream"));
         sendRequestButton = (Button) view.findViewById(R.id.sendRequestButton);
         sendRequestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendRequestDialog();        
+                sendRequestDialog(); 
+
             }
         });
         return view;  
@@ -72,80 +75,48 @@ public class MainFragment extends Fragment {
 	        sendRequestButton.setVisibility(View.INVISIBLE);
 	    }
 	}
-	private void sendRequestDialog() {
-		/*FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this.getActivity())
-        .setLink("http://developer.android.com/intl/zh-cn/index.html")
-        .setDescription("This is SDK test")
-        .setName("name")
-        .setCaption("Caption")
-        .setPicture("https://lh4.googleusercontent.com/-iJyrkSyGc6U/AAAAAAAAAAI/AAAAAAAAAqE/6Ctt86bBArw/photo.jpg")
-        .build();
-		//uiHelper.trackPendingDialogCall(shareDialog.present());*/
-		publishFeedDialog();
-	}
 	
-	private void publishFeedDialog() {
-	    Bundle params = new Bundle();
-	    params.putString("name", "Facebook SDK for Android");
-	    params.putString("caption", "Build great social apps and get more installs.");
-	    params.putString("description", "The Facebook SDK for Android makes it easier and faster to develop Facebook integrated Android apps.");
-	    params.putString("link", "https://developers.facebook.com/android");
-	    params.putString("picture", "https://raw.github.com/fbsamples/ios-3.x-howtos/master/Images/iossdk_logo.png");
+	private void sendRequestDialog() {
 
-	    WebDialog feedDialog = (
-	        new WebDialog.FeedDialogBuilder(getActivity(),
-	            Session.getActiveSession(),
-	            params).setOnCompleteListener(new OnCompleteListener() {
+		if(FacebookDialog.canPresentShareDialog(this.getActivity(), FacebookDialog.ShareDialogFeature.SHARE_DIALOG))
+		{
+			FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this.getActivity())
+	        .setLink("http://developer.android.com/intl/zh-cn/index.html")
+	        .setDescription("This is SDK test")
+	        .setName("name")
+	        .setCaption("Caption")
+	        .setPicture("https://lh4.googleusercontent.com/-iJyrkSyGc6U/AAAAAAAAAAI/AAAAAAAAAqE/6Ctt86bBArw/photo.jpg")
+	        .build();
+			uiHelper.trackPendingDialogCall(shareDialog.present());
+		}
+		else
+		{
+			try
+			{
 
-	            @Override
-	            public void onComplete(Bundle values,
-	                FacebookException error) {
-	                if (error == null) {
-	                    // When the story is posted, echo the success
-	                    // and the post Id.
-	                    final String postId = values.getString("post_id");
-	                    if (postId != null) {
-	                        Toast.makeText(getActivity(),
-	                            "Posted story, id: "+postId,
-	                            Toast.LENGTH_SHORT).show();
-	                    } else {
-	                        // User clicked the Cancel button
-	                        Toast.makeText(getActivity().getApplicationContext(), 
-	                            "Publish cancelled", 
-	                            Toast.LENGTH_SHORT).show();
-	                    }
-	                } else if (error instanceof FacebookOperationCanceledException) {
-	                    // User clicked the "x" button
-	                    Toast.makeText(getActivity().getApplicationContext(), 
-	                        "Publish cancelled", 
-	                        Toast.LENGTH_SHORT).show();
-	                } else {
-	                    // Generic, ex: network error
-	                    Toast.makeText(getActivity().getApplicationContext(), 
-	                        "Error posting story", 
-	                        Toast.LENGTH_SHORT).show();
-	                }
-	            }
+				Bitmap bmp = BitmapFactory.decodeResource(getResources(),R.drawable.ic_launcher);
+			    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			    bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+				com.facebook.Request request = com.facebook.Request.newUploadPhotoRequest(Session.getActiveSession(), bmp, new Request.Callback() {
 
-	        }).build());
+					@Override
+					public void onCompleted(Response response) {
+						// TODO Auto-generated method stub
+						
+					}});
 
-	    		/*WebDialog feedDialog = (
-	    		        new WebDialog.FeedDialogBuilder(getActivity(),
-	    		            Session.getActiveSession(),
-	    		            params))
-	    		        .setOnCompleteListener(new OnCompleteListener(){
+				Bundle params = request.getParameters();
+				params.putString("name", "I finally upload the message and phone to the timeline by the facebook sdk");
+				request.setParameters(params);
+				Request.executeBatchAsync(request);
+			}catch(Exception e){
+				Log.e("shareDialog", e.getMessage());
+			}
+			Toast.makeText(this.getActivity(), "Your achivement has shared with your friends!",
+					   Toast.LENGTH_LONG).show();
+		}
 
-							@Override
-							public void onComplete(Bundle values,
-									FacebookException error) {
-								// TODO Auto-generated method stub
-								
-							}})
-	    		        .build();
-	    		feedDialog.setTitle("willpower");*/
-	    		feedDialog.show();
-	}	
-
+}
       
     @Override  
     public void onResume() {  
@@ -164,8 +135,7 @@ public class MainFragment extends Fragment {
   
     @Override  
     public void onActivityResult(int requestCode, int resultCode, Intent data) {  
-//        super.onActivityResult(requestCode, resultCode, data);  
-//        uiHelper.onActivityResult(requestCode, resultCode, data);  
+
 	        super.onActivityResult(requestCode, resultCode, data);
 	
 	        uiHelper.onActivityResult(requestCode, resultCode, data, new FacebookDialog.Callback() {
