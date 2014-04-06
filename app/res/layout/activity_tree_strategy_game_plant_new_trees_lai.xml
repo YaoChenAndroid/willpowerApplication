@@ -28,11 +28,12 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/tree_plant_new_tree_new_acres_hint_lai"
                 android:inputType="number"
+                android:text="0"
                 android:textSize="25dp" />
             
         </TableRow>
         
-        <TabbleRow
+        <TableRow
             android:id="@+id/tree_plant_new_tree_credits_lai"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
@@ -50,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="25dp" />
             
-        </TabbleRow>
+        </TableRow>
         
         <TableRow
             android:id="@+id/tree_plant_new_tree_credits_msg_lai"
