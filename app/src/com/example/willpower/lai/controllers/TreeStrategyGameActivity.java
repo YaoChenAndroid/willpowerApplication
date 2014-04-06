@@ -10,10 +10,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +51,8 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 	private Button mPlant_new_tree_lai;
 	private Button mView_current_score_lai;
 	private Button mSave_current_game_lai;
+	
+	private View plantNewTreeView;
 	
 	@SuppressLint("NewApi")
 	@Override
@@ -162,18 +172,27 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 			if (treeMainLock.isLocked()) {
 				continue;
 			} else {
+				treeMainLock.lock();
 				if (isPlantNew) {
-					long currentCost = mCostPerAcre * mAcres;
-					if (currentCost <= mCurrentCredits) {
-						mCurrentCredits = mCurrentCredits - currentCost;
-						mCurrentAcres = mCurrentAcres + mAcres;
+					try {
+						long currentCost = mCostPerAcre * mAcres;
+						if (currentCost <= mCurrentCredits) {
+							mCurrentCredits = mCurrentCredits - currentCost;
+							mCurrentAcres = mCurrentAcres + mAcres;
+						}
+					} finally {
+						treeMainLock.unlock();
 					}
 					break;
 				} else {
-					long profit = mCurrentValuePerAcre * mAcres;
-					if (mAcres <= mCurrentAcres) {
-						mCurrentCredits = mCurrentCredits + profit;
-						mCurrentAcres = mCurrentAcres - mAcres;
+					try {
+						long profit = mCurrentValuePerAcre * mAcres;
+						if (mAcres <= mCurrentAcres) {
+							mCurrentCredits = mCurrentCredits + profit;
+							mCurrentAcres = mCurrentAcres - mAcres;
+						}
+					} finally {
+						treeMainLock.unlock();
 					}
 					break;
 				}
@@ -185,8 +204,109 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 	 * a dialog to input the information about planting new trees
 	 */
 	public void plantNewTreeDialog() {
+		LayoutInflater inflater = (LayoutInflater) TreeStrategyGameActivity.this.getSystemService(LAYOUT_INFLATER_SERVICE);
+		plantNewTreeView = inflater.inflate(R.layout.activity_tree_strategy_game_plant_new_trees_lai, null);
+		treeHandler.postDelayed(plantNewTreeRunnable, 0);
+		final EditText newAcresEditText = (EditText) plantNewTreeView.findViewById(R.id.tree_plant_new_tree_new_acres_input_lai);
+		final EditText creditsEditText = (EditText) plantNewTreeView.findViewById(R.id.tree_plant_new_tree_credits_cost_lai);
+		creditsEditText.setKeyListener(null);
+		AlertDialog.Builder builder = new AlertDialog.Builder(TreeStrategyGameActivity.this);
+		builder.setTitle("Plant new trees");
+		builder.setView(plantNewTreeView);
+		builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				long newAcres = Long.parseLong(newAcresEditText.getText().toString());
+				long totalCost = newAcres * mCostPerAcre;
+				if (mCurrentCredits >= totalCost) {
+					while (true) {
+						if (treeMainLock.isLocked()) {
+							continue;
+						} else {
+							treeMainLock.lock();
+							try {
+								mCurrentAcres = mCurrentAcres + newAcres;
+								mCurrentCredits = mCurrentCredits - totalCost;
+							} finally {
+								treeMainLock.unlock();
+							}
+							break;
+						}
+					}
+				}
+				treeHandler.removeCallbacks(plantNewTreeRunnable);
+			}
+			
+		});
+		builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				treeHandler.removeCallbacks(plantNewTreeRunnable);
+				dialog.cancel();
+			}
+		});
+		final AlertDialog treeDialog = builder.create();
+		treeDialog.setCancelable(false);
+		treeDialog.show();
 		
+		newAcresEditText.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				if (s.length() > 0) {
+					treeDialog.getButton(Dialog.BUTTON_POSITIVE).setEnabled(true);
+				} else {
+					treeDialog.getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
+				}
+			}
+			
+		});
 	}
+	
+	/**
+	 * used only for the plantNewTreeDialog to check the valid value
+	 */
+	private Runnable plantNewTreeRunnable = new Runnable() {
+
+		@Override
+		public void run() {
+			EditText newAcresEditText = (EditText) plantNewTreeView.findViewById(R.id.tree_plant_new_tree_new_acres_input_lai);
+			EditText creditsEditText = (EditText) plantNewTreeView.findViewById(R.id.tree_plant_new_tree_credits_cost_lai);
+			TextView creditsMsg = (TextView) plantNewTreeView.findViewById(R.id.tree_plant_new_tree_credits_msgresult_lai);
+			try {
+				long newAcres = Long.parseLong(newAcresEditText.getText().toString());
+				long creditsCost = newAcres * mCostPerAcre;
+				if (creditsCost > mCurrentCredits) {
+					creditsEditText.setText(String.valueOf(creditsCost));
+					creditsEditText.setTextColor(Color.parseColor("#FF0000"));
+					creditsMsg.setText("Not Enough credits, you have only " + mCurrentCredits + " credits.");
+					creditsMsg.setTextColor(Color.parseColor("#FF0000"));
+				} else {
+					creditsEditText.setText(String.valueOf(creditsCost));
+				}
+			} catch (Exception e) {
+				//do nothing
+			}		
+			treeHandler.postDelayed(this, 20);
+		}
+		
+	};
 	
 	/**
 	 * toast, makeText function
