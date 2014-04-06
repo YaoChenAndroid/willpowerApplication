@@ -1,8 +1,12 @@
 package com.example.willpower.lai.controllers;
 
+import java.util.ArrayList;
+
 import com.example.willpower.controllers.R;
 import com.example.willpower.controllers.R.layout;
 import com.example.willpower.controllers.R.menu;
+import com.example.willpower.lai.SQLiteOpenHelper.TreeStrategyGameDatabaseHelper;
+import com.example.willpower.lai.models.TreeGameObject;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,6 +28,8 @@ public class TreeStrategyMainActivity extends Activity {
 	private Button mTreeStrategyContinue;
 	private Button mTreeStrategyViewScore;
 	private Button mTreeStrategyBackToMain;
+	
+	private TreeStrategyGameDatabaseHelper db = new TreeStrategyGameDatabaseHelper(TreeStrategyMainActivity.this);
 	
 	public static final int START_TREE_ACTIVITY_ACTION = 2;
 	
@@ -52,6 +58,11 @@ public class TreeStrategyMainActivity extends Activity {
 		mTreeStrategyContinue = (Button)findViewById(R.id.tree_strategy_continue);
 		mTreeStrategyViewScore = (Button)findViewById(R.id.tree_strategy_view_score);
 		mTreeStrategyBackToMain = (Button)findViewById(R.id.tree_strategy_back_to_main);
+		
+		ArrayList<TreeGameObject> log = db.getAllTreeGameObject();
+		if (log.size() == 0) {
+			mTreeStrategyContinue.setClickable(false);
+		}
 		
 		mTreeStrategyNewGame.setOnClickListener(new View.OnClickListener() {
 

@@ -9,24 +9,43 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="0.42"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/TreeGameCountDown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25dp"
+            android:text="TextView" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="0.81"
-        android:gravity="center|center_vertical"
+        android:gravity="center_horizontal"
         android:orientation="vertical" >
 
         <TextView
             android:id="@+id/TreeGameMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="50dp"
-            android:textColor="#00FF00" >
-        </TextView>
-
+            android:textColor="#00FF00"
+            android:textSize="50dp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="88dp"
         android:layout_weight="0.03" >
+
+        <Button
+            android:id="@+id/back_to_main_lai"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@drawable/back_button_lai" />
 
         <Button
             android:id="@+id/cut_new_tree_lai"
@@ -41,17 +60,10 @@
             android:background="@drawable/tree_icon_lai" />
 
         <Button
-            android:id="@+id/view_current_score_lai"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:background="@drawable/score_icon1_lai" />
-
-        <Button
             android:id="@+id/save_current_game_lai"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:background="@drawable/save_icon1_lai" />
-
     </LinearLayout>
 
 </LinearLayout>
