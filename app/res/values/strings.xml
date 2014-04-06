@@ -6,7 +6,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="app_id">510119485760833</string>
     <string name="congra">You have win the game!</string>
-    <string name="share">Share to Facebook</string>
+    <string name="share">Facebook</string>
     
     <string name="title_activity_tree_strategy_main">TreeStrategyMainActivity</string>
     <string name="tree_strategy_new_game">New Game</string>
