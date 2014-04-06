@@ -4,4 +4,7 @@
 	<string name="tree_plant_new_tree_new_acres_label_lai">Acres to plant</string>
 	<string name="tree_plant_new_tree_new_acres_hint_lai">Input Acres Number</string>
 	<string name="tree_plant_new_tree_credits_label_lai">Credits to cost</string>
+	<string name="tree_cut_down_trees_new_acres_label_lai">Acres to plant</string>
+	<string name="tree_cut_down_trees_new_acres_hint_lai">Input Acres Number</string>
+	<string name="tree_cut_down_trees_credits_label_lai">Credits to cost</string>
 </resources>

@@ -52,7 +52,7 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 	private Button mView_current_score_lai;
 	private Button mSave_current_game_lai;
 	
-	private View plantNewTreeView;
+//	private View plantNewTreeView;
 	
 	@SuppressLint("NewApi")
 	@Override
@@ -97,8 +97,10 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 		int viewId = v.getId();
 		if (viewId == R.id.cut_new_tree_lai) {
 			toastAnnounce("cut new trees");
+			cutTreesDialog();
 		} else if (viewId == R.id.plant_new_tree_lai) {
 			toastAnnounce("plant new trees");
+			plantNewTreeDialog();
 		} else if (viewId == R.id.view_current_score_lai) {
 			toastAnnounce("view current score");
 		} else if (viewId == R.id.save_current_game_lai) {
@@ -205,10 +207,11 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 	 */
 	public void plantNewTreeDialog() {
 		LayoutInflater inflater = (LayoutInflater) TreeStrategyGameActivity.this.getSystemService(LAYOUT_INFLATER_SERVICE);
-		plantNewTreeView = inflater.inflate(R.layout.activity_tree_strategy_game_plant_new_trees_lai, null);
-		treeHandler.postDelayed(plantNewTreeRunnable, 0);
+		final View plantNewTreeView = inflater.inflate(R.layout.activity_tree_strategy_game_plant_new_trees_lai, null);
+		//treeHandler.postDelayed(plantNewTreeRunnable, 0);
 		final EditText newAcresEditText = (EditText) plantNewTreeView.findViewById(R.id.tree_plant_new_tree_new_acres_input_lai);
 		final EditText creditsEditText = (EditText) plantNewTreeView.findViewById(R.id.tree_plant_new_tree_credits_cost_lai);
+		final TextView creditsMsg = (TextView) plantNewTreeView.findViewById(R.id.tree_plant_new_tree_credits_msgresult_lai);
 		creditsEditText.setKeyListener(null);
 		AlertDialog.Builder builder = new AlertDialog.Builder(TreeStrategyGameActivity.this);
 		builder.setTitle("Plant new trees");
@@ -218,24 +221,7 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				long newAcres = Long.parseLong(newAcresEditText.getText().toString());
-				long totalCost = newAcres * mCostPerAcre;
-				if (mCurrentCredits >= totalCost) {
-					while (true) {
-						if (treeMainLock.isLocked()) {
-							continue;
-						} else {
-							treeMainLock.lock();
-							try {
-								mCurrentAcres = mCurrentAcres + newAcres;
-								mCurrentCredits = mCurrentCredits - totalCost;
-							} finally {
-								treeMainLock.unlock();
-							}
-							break;
-						}
-					}
-				}
-				treeHandler.removeCallbacks(plantNewTreeRunnable);
+				updateAcres(newAcres, true);
 			}
 			
 		});
@@ -243,12 +229,14 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				treeHandler.removeCallbacks(plantNewTreeRunnable);
+				//treeHandler.removeCallbacks(plantNewTreeRunnable);
 				dialog.cancel();
 			}
 		});
 		final AlertDialog treeDialog = builder.create();
 		treeDialog.setCancelable(false);
+		//treeDialog.getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
+		
 		treeDialog.show();
 		
 		newAcresEditText.addTextChangedListener(new TextWatcher() {
@@ -270,7 +258,23 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 			@Override
 			public void afterTextChanged(Editable s) {
 				if (s.length() > 0) {
-					treeDialog.getButton(Dialog.BUTTON_POSITIVE).setEnabled(true);
+					try {
+						long newAcres = Long.parseLong(newAcresEditText.getText().toString());
+						long creditsCost = newAcres * mCostPerAcre;
+						if (creditsCost > mCurrentCredits) {
+							creditsEditText.setText(String.valueOf(creditsCost));
+							creditsEditText.setTextColor(Color.parseColor("#FF0000"));
+							creditsMsg.setText("Not Enough credits");
+							creditsMsg.setTextColor(Color.parseColor("#FF0000"));
+						} else {
+							creditsEditText.setText(String.valueOf(creditsCost));
+							creditsEditText.setTextColor(Color.parseColor("#000000"));
+							creditsMsg.setText("");
+							treeDialog.getButton(Dialog.BUTTON_POSITIVE).setEnabled(true);
+						}
+					} catch (Exception e) {
+						//do nothing
+					}
 				} else {
 					treeDialog.getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
 				}
@@ -280,33 +284,81 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 	}
 	
 	/**
-	 * used only for the plantNewTreeDialog to check the valid value
+	 * a dialog to input the information about cutting trees
 	 */
-	private Runnable plantNewTreeRunnable = new Runnable() {
+	public void cutTreesDialog() {
+		LayoutInflater inflater = (LayoutInflater) TreeStrategyGameActivity.this.getSystemService(LAYOUT_INFLATER_SERVICE);
+		final View cutDownTreesView = inflater.inflate(R.layout.activity_tree_strategy_game_cut_trees_lai, null);
+		//treeHandler.postDelayed(plantNewTreeRunnable, 0);
+		final EditText newAcresEditText = (EditText) cutDownTreesView.findViewById(R.id.tree_cut_down_trees_new_acres_input_lai);
+		//final EditText creditsEditText = (EditText) cutDownTreesView.findViewById(R.id.tree_cut_down_trees_credits_cost_lai);
+		final TextView cutDownTreesMsg = (TextView) cutDownTreesView.findViewById(R.id.tree_cut_down_trees_msgresult_lai);
+		//creditsEditText.setKeyListener(null);
+		AlertDialog.Builder builder = new AlertDialog.Builder(TreeStrategyGameActivity.this);
+		builder.setTitle("Cut down trees");
+		builder.setView(cutDownTreesView);
+		builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
 
-		@Override
-		public void run() {
-			EditText newAcresEditText = (EditText) plantNewTreeView.findViewById(R.id.tree_plant_new_tree_new_acres_input_lai);
-			EditText creditsEditText = (EditText) plantNewTreeView.findViewById(R.id.tree_plant_new_tree_credits_cost_lai);
-			TextView creditsMsg = (TextView) plantNewTreeView.findViewById(R.id.tree_plant_new_tree_credits_msgresult_lai);
-			try {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
 				long newAcres = Long.parseLong(newAcresEditText.getText().toString());
-				long creditsCost = newAcres * mCostPerAcre;
-				if (creditsCost > mCurrentCredits) {
-					creditsEditText.setText(String.valueOf(creditsCost));
-					creditsEditText.setTextColor(Color.parseColor("#FF0000"));
-					creditsMsg.setText("Not Enough credits, you have only " + mCurrentCredits + " credits.");
-					creditsMsg.setTextColor(Color.parseColor("#FF0000"));
-				} else {
-					creditsEditText.setText(String.valueOf(creditsCost));
-				}
-			} catch (Exception e) {
-				//do nothing
-			}		
-			treeHandler.postDelayed(this, 20);
-		}
+				updateAcres(newAcres, false);
+			}
+			
+		});
+		builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				//treeHandler.removeCallbacks(plantNewTreeRunnable);
+				dialog.cancel();
+			}
+		});
+		final AlertDialog treeDialog = builder.create();
+		treeDialog.setCancelable(false);
+		//treeDialog.getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
 		
-	};
+		treeDialog.show();
+		
+		newAcresEditText.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				if (s.length() > 0) {
+					try {
+						long newAcres = Long.parseLong(newAcresEditText.getText().toString());
+						if (newAcres > mCurrentAcres) {
+							cutDownTreesMsg.setText("Not Enough trees");
+							cutDownTreesMsg.setTextColor(Color.parseColor("#FF0000"));
+							treeDialog.getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
+						} else {
+							cutDownTreesMsg.setText("");
+							treeDialog.getButton(Dialog.BUTTON_POSITIVE).setEnabled(true);
+						}
+					} catch (Exception e) {
+						//do nothing
+					}
+				} else {
+					treeDialog.getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
+				}
+			}
+			
+		});
+	}
 	
 	/**
 	 * toast, makeText function
