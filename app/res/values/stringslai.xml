@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="lai_author">lai</string>
+	<string name="tree_plant_new_tree_new_acres_label_lai">Acres to plant</string>
+	<string name="tree_plant_new_tree_new_acres_hint_lai">Input Acres Number</string>
+	<string name="tree_plant_new_tree_credits_label_lai">Credits to cost</string>
 </resources>

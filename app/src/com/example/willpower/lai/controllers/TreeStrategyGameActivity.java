@@ -182,6 +182,13 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 	}
 
 	/**
+	 * a dialog to input the information about planting new trees
+	 */
+	public void plantNewTreeDialog() {
+		
+	}
+	
+	/**
 	 * toast, makeText function
 	 */
 	public void toastAnnounce(String text) {
