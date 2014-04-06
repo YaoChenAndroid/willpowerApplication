@@ -5,12 +5,12 @@ import android.os.Parcelable;
 
 public class TreeGameObject implements Parcelable{
 	
-	private int mCostPerAcre; // Credits that needed to plant new trees
+	private long mCostPerAcre; // Credits that needed to plant new trees
 	private double mCurrentAcresIncreaseRate; // Increase rate, which is given by system
-	private int mCurrentAcres; // Acres that users currently handle
-	private int mCurrentCredits; // Credits that users currently handle
-	private int mCurrentMaintainPerAcre; // Credits that needed to maintain the trees per peroid time
-	private int mCurrentValuePerAcre; // Credits that users can gain when cutting down trees
+	private long mCurrentAcres; // Acres that users currently handle
+	private long mCurrentCredits; // Credits that users currently handle
+	private long mCurrentMaintainPerAcre; // Credits that needed to maintain the trees per peroid time
+	private long mCurrentValuePerAcre; // Credits that users can gain when cutting down trees
 	
 	public static final Parcelable.Creator<TreeGameObject> CREATOR = new Parcelable.Creator<TreeGameObject>() {
 
@@ -35,8 +35,8 @@ public class TreeGameObject implements Parcelable{
 	 * @param mCurrentAcres
 	 * @param mCurrentCredits
 	 */
-	public TreeGameObject(int mCostPerAcre, double mCurrentAcresIncreaseRate, int mCurrentAcres, int mCurrentCredits,
-			int mCurrentMaintainPerAcre, int mCurrentValuePerAcre) {
+	public TreeGameObject(long mCostPerAcre, double mCurrentAcresIncreaseRate, long mCurrentAcres, long mCurrentCredits,
+			long mCurrentMaintainPerAcre, long mCurrentValuePerAcre) {
 		this.mCostPerAcre = mCostPerAcre;
 		this.mCurrentAcresIncreaseRate = mCurrentAcresIncreaseRate;
 		this.mCurrentAcres = mCurrentAcres;
@@ -50,12 +50,12 @@ public class TreeGameObject implements Parcelable{
 	 * @param p
 	 */
 	public TreeGameObject(Parcel p) {
-		this.mCostPerAcre = p.readInt();
+		this.mCostPerAcre = p.readLong();
 		this.mCurrentAcresIncreaseRate = p.readDouble();
-		this.mCurrentAcres = p.readInt();
-		this.mCurrentCredits = p.readInt();
-		this.mCurrentMaintainPerAcre = p.readInt();
-		this.mCurrentValuePerAcre = p.readInt();
+		this.mCurrentAcres = p.readLong();
+		this.mCurrentCredits = p.readLong();
+		this.mCurrentMaintainPerAcre = p.readLong();
+		this.mCurrentValuePerAcre = p.readLong();
 	}
 
 	@Override
@@ -66,16 +66,16 @@ public class TreeGameObject implements Parcelable{
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeInt(this.mCostPerAcre);
+		dest.writeLong(this.mCostPerAcre);
 		dest.writeDouble(this.mCurrentAcresIncreaseRate);
-		dest.writeInt(this.mCurrentAcres);
-		dest.writeInt(this.mCurrentCredits);
-		dest.writeInt(this.mCurrentMaintainPerAcre);
-		dest.writeInt(this.mCurrentValuePerAcre);
+		dest.writeLong(this.mCurrentAcres);
+		dest.writeLong(this.mCurrentCredits);
+		dest.writeLong(this.mCurrentMaintainPerAcre);
+		dest.writeLong(this.mCurrentValuePerAcre);
 	}
 	
 	// Some get and set functions
-	public int getCostPerAcre() {
+	public long getCostPerAcre() {
 		return this.mCostPerAcre;
 	}
 	
@@ -91,7 +91,7 @@ public class TreeGameObject implements Parcelable{
 		this.mCurrentAcresIncreaseRate = mCurrentAcresIncreaseRate;
 	}
 	
-	public int getCurrentAcres() {
+	public long getCurrentAcres() {
 		return this.mCurrentAcres;
 	}
 	
@@ -99,7 +99,7 @@ public class TreeGameObject implements Parcelable{
 		this.mCurrentAcres = mCurrentAcres;
 	}
 	
-	public int getCurrentCredits() {
+	public long getCurrentCredits() {
 		return this.mCurrentCredits;
 	}
 	
@@ -107,7 +107,7 @@ public class TreeGameObject implements Parcelable{
 		this.mCurrentCredits = mCurrentCredits;
 	}
 	
-	public int getCurrentMaintainPerAcre() {
+	public long getCurrentMaintainPerAcre() {
 		return this.mCurrentMaintainPerAcre;
 	}
 	
@@ -115,7 +115,7 @@ public class TreeGameObject implements Parcelable{
 		this.mCurrentMaintainPerAcre = mCurrentMaintainPerAcre;
 	}
 	
-	public int getCurrentValuePerAcre() {
+	public long getCurrentValuePerAcre() {
 		return this.mCurrentValuePerAcre;
 	}
 	
