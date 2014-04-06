@@ -87,7 +87,7 @@ public class MainFragment extends Fragment {
 	        .setCaption("Caption")
 	        .setPicture("https://lh4.googleusercontent.com/-iJyrkSyGc6U/AAAAAAAAAAI/AAAAAAAAAqE/6Ctt86bBArw/photo.jpg")
 	        .build();
-			uiHelper.trackPendingDialogCall(shareDialog.present());
+			uiHelper.trackPendingDialogCall(shareDialog.present());			
 		}
 		else
 		{
