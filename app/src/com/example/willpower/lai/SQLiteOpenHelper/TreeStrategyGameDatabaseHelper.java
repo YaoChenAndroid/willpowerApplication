@@ -33,9 +33,9 @@ public class TreeStrategyGameDatabaseHelper extends SQLiteOpenHelper{
 	public void onCreate(SQLiteDatabase db) {
 		String create_table = "create table " + TABLE_TREESTRATEGY + "("
 				+ COLUMN_TREESTRATEGY_ID + " integer primary key autoincrement, "
-				+ COLUMN_COSTPERACRE + " integer, " + COLUMN_CURRENTACRESINCREASERATE + " double, "
-				+ COLUMN_CURRENTACRES + " integer, " + COLUMN_CURRENTCREDITS + " integer, "
-				+ COLUMN_CURRENTMAINTAINPERACRE + " integer, " + COLUMN_CURRENTVALUEPERACRE + " integer)";
+				+ COLUMN_COSTPERACRE + " bigint, " + COLUMN_CURRENTACRESINCREASERATE + " double, "
+				+ COLUMN_CURRENTACRES + " bigint, " + COLUMN_CURRENTCREDITS + " bigint, "
+				+ COLUMN_CURRENTMAINTAINPERACRE + " bigint, " + COLUMN_CURRENTVALUEPERACRE + " bigint)";
 		db.execSQL(create_table);
 	}
 
@@ -84,12 +84,12 @@ public class TreeStrategyGameDatabaseHelper extends SQLiteOpenHelper{
 		Cursor c = db.rawQuery(select, null);
 		
 		for (c.moveToFirst();!c.isAfterLast();c.moveToNext()) {
-			int costPerAcre = c.getInt(1);
+			long costPerAcre = c.getLong(1);
 			double currentAcreIncreaseRate = c.getDouble(2);
-			int currentAcres = c.getInt(3);
-			int currentCredits = c.getInt(4);
-			int currentMaintainPerAcre = c.getInt(5);
-			int currentValuePerAcre = c.getInt(6);
+			long currentAcres = c.getLong(3);
+			long currentCredits = c.getLong(4);
+			long currentMaintainPerAcre = c.getLong(5);
+			long currentValuePerAcre = c.getLong(6);
 			
 			TreeGameObject tgo = new TreeGameObject(costPerAcre, currentAcreIncreaseRate,
 					currentAcres, currentCredits, currentMaintainPerAcre, currentValuePerAcre);
