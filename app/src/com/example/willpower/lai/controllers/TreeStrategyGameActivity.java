@@ -44,7 +44,7 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 	private boolean notEnough = false; // use flag to record the status of increase or decrease rate
 	
 	private Handler treeHandler = new Handler();
-	private int period_time = 30 * 1000;
+	private int period_time = 15 * 1000;
 	private int printResult_interval = 50;
 	private ReentrantLock treeMainLock = new ReentrantLock();
 	
@@ -56,7 +56,7 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 	private Button mBack_to_main_lai;
 	private Button mSave_current_game_lai;
 	
-	private int mCountDown = 30;
+	private int mCountDown = 15;
 	private boolean isNewPeriod = false;
 	private boolean mBlinkTimer = true;
 	
@@ -137,7 +137,7 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 		@Override
 		public void run() {
 			mCountDown -- ;
-			if (mCountDown > 10) {
+			if (mCountDown > 5) {
 				mTreeGameCountDown.setTextColor(Color.parseColor("#00FF00"));
 			} else {
 				if (mBlinkTimer) {
@@ -169,7 +169,7 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 		@Override
 		public void run() {
 			if (isNewPeriod) {
-				mCountDown = 30;
+				mCountDown = 15;
 				isNewPeriod = false;
 			}
 			treeMainLock.lock();
@@ -216,8 +216,8 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 
 		@Override
 		public void run() {
-			String result = "Current Acres: " + mCurrentAcres + "\n"
-					+ "Current Credits: " + mCurrentCredits;
+			String result = "Tree Acres: " + mCurrentAcres + "\n"
+					+ "Current Money: " + mCurrentCredits;
 			mTreeGameMessage.setText(result);
 			treeHandler.postDelayed(this, printResult_interval);
 		}
