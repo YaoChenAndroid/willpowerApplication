@@ -4,6 +4,8 @@ import com.example.willpower.controllers.R;
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;  
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;  
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,6 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;  
 import android.view.View;  
 import android.view.ViewGroup;  
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -87,36 +91,46 @@ public class MainFragment extends Fragment {
 	        .setCaption("Caption")
 	        .setPicture("https://lh4.googleusercontent.com/-iJyrkSyGc6U/AAAAAAAAAAI/AAAAAAAAAqE/6Ctt86bBArw/photo.jpg")
 	        .build();
-			uiHelper.trackPendingDialogCall(shareDialog.present());			
-		}
-		else
-		{
-			try
-			{
-
-				Bitmap bmp = BitmapFactory.decodeResource(getResources(),R.drawable.ic_launcher);
-			    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			    bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-				com.facebook.Request request = com.facebook.Request.newUploadPhotoRequest(Session.getActiveSession(), bmp, new Request.Callback() {
-
-					@Override
-					public void onCompleted(Response response) {
-						// TODO Auto-generated method stub
-						
-					}});
-
-				Bundle params = request.getParameters();
-				params.putString("name", "I finally upload the message and phone to the timeline by the facebook sdk");
-				request.setParameters(params);
-				Request.executeBatchAsync(request);
-			}catch(Exception e){
-				Log.e("shareDialog", e.getMessage());
-			}
+			uiHelper.trackPendingDialogCall(shareDialog.present());	
 			Toast.makeText(this.getActivity(), "Your achivement has shared with your friends!",
 					   Toast.LENGTH_LONG).show();
 		}
+		else
+		{
+			
+			WebView myWebView = new WebView(getActivity());
+			myWebView.getSettings().setUserAgentString("Mozilla/5.0 (compatible; MSIE 10.0; Windows Phone 8.0; Trident/6.0; IEMobile/10.0; ARM; Touch; NOKIA; Lumia 920)");
+			myWebView.getSettings().setLoadWithOverviewMode(true);
+			myWebView.getSettings().setUseWideViewPort(true);
+			myWebView.getSettings().setSupportZoom(false);
+			//myWebView.getSettings().setJavaScriptEnabled(true);
 
-}
+			myWebView.setWebViewClient(new WebViewClient(){
+				@Override
+				public boolean shouldOverrideUrlLoading(WebView view, String url) {
+					// TODO Auto-generated method stub
+					view.loadUrl(url);
+					return false;
+				}
+			});
+
+			myWebView.loadUrl("https://www.facebook.com/dialog/feed?app_id=510119485760833&display=popup&caption=An%20example%20caption&link=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fdialogs%2F&redirect_uri=http://willpower.parseapp.com/");
+			
+		    AlertDialog.Builder dialog = new AlertDialog.Builder(this.getActivity());
+		    dialog.setView(myWebView);
+		    dialog.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+
+		            public void onClick(DialogInterface dialog, int which) {
+
+		                dialog.dismiss();
+		            }
+		        });
+		    dialog.show();
+			Toast.makeText(this.getActivity(), "Loading...",Toast.LENGTH_LONG).show();
+		}
+
+	}
+
       
     @Override  
     public void onResume() {  
