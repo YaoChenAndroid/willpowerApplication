@@ -103,6 +103,14 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 				doMapQuery();
 			}	    	
 	    });
+	    if(GooglePlayServicesUtil.isGooglePlayServicesAvailable( getApplicationContext() ) == ConnectionResult.SUCCESS)
+	    	Log.i("YaoChen", "Successful!");
+	    else
+	    {
+	    	int n = GooglePlayServicesUtil.isGooglePlayServicesAvailable( getApplicationContext() );
+	    	Log.e("YaoChen", String.valueOf(n));
+	    }
+	    
 	    ///test
 //	        Marker hamburg = map.addMarker(new MarkerOptions().position(YAOCHEN)
 //	            .title("YaoChen"));
