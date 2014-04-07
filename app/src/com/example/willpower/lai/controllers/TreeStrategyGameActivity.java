@@ -183,13 +183,20 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 						if (mCurrentAcres == 0) {
 							toastAnnounce("Game Over");
 							treeHandler.removeCallbacks(this);
+							treeHandler.removeCallbacks(gameTimer);
 						}
 						mCurrentAcres = (long) (mCurrentAcres * (1 - mCurrentIncreaseRate));
 					}
 				} else {
 					notEnough = false;
 					if (totalMaintain == mCurrentCredits) {
-						toastAnnounce("Our credits are running low!");
+						if (mCurrentCredits == 0) {
+							toastAnnounce("Game Over");
+							treeHandler.removeCallbacks(this);
+							treeHandler.removeCallbacks(gameTimer);
+						} else {
+							toastAnnounce("Our credits are running low!");
+						}
 					}
 					mCurrentCredits = mCurrentCredits - totalMaintain;
 					mCurrentAcres = (long) (mCurrentAcres * (1 + mCurrentIncreaseRate));
