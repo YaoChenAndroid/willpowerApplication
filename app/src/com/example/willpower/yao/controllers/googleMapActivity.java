@@ -153,6 +153,7 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 			}
 		}
 	}
+	//get other users in certain distance from current user
 	private void doMapQuery() {
 		// TODO Auto-generated method stub
         Location myLoc = (currentLocation == null) ? lastLocation : currentLocation;
@@ -219,10 +220,6 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 	private void saveUserLocation() 
 	{
         //save current location to parse
-		
-
-
-
         ParseQuery<friendLoc> locQuery = friendLoc.getQuery();   
         locQuery.whereEqualTo("text", username);
         locQuery.findInBackground(new FindCallback<friendLoc>(){
@@ -239,7 +236,7 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 		          return;
 		        }
 		        final ParseGeoPoint myPoint = geoPointFromLocation(myLoc);
-		        if(arg0.size() == 1){
+		        if(arg0.size() == 1){//if current user has record in the server, update
 		        	arg0.get(0).setLocation(myPoint);
 		        	arg0.get(0).saveInBackground(new SaveCallback(){
 						@Override
@@ -251,7 +248,7 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 			        });
 		        }
 		        else
-		        {
+		        {//if not, insert a new user into server
 			        friendLoc loc = new friendLoc();
 			        loc.setLocation(myPoint);
 			        loc.setText(username);

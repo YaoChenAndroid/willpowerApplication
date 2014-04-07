@@ -1,17 +1,13 @@
 package com.example.willpower.yao.controllers;
 import com.example.willpower.controllers.R;
 
-import java.io.ByteArrayOutputStream;
 import java.util.Arrays;  
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;  
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.Intent;
 import android.os.Bundle;  
 import android.support.v4.app.Fragment;  
-import android.util.Log;  
 import android.view.LayoutInflater;  
 import android.view.View;  
 import android.view.ViewGroup;  
@@ -20,18 +16,20 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.facebook.Request;
-import com.facebook.Response;
 import com.facebook.Session;  
 import com.facebook.SessionState;  
 import com.facebook.UiLifecycleHelper;  
 import com.facebook.widget.FacebookDialog;
+import com.facebook.widget.FacebookDialog.Callback;
+import com.facebook.widget.FacebookDialog.PendingCall;
 import com.facebook.widget.LoginButton;  
 
 public class MainFragment extends Fragment {  
     private UiLifecycleHelper uiHelper;  
     
     private Button sendRequestButton;
+    private boolean overflag = false;
+    //the call back function when the user's facebook status change.
     private Session.StatusCallback callback = new Session.StatusCallback() {  
         @Override  
         public void call(Session session, SessionState state,  
@@ -39,10 +37,11 @@ public class MainFragment extends Fragment {
             onSessionStateChange(session, state, exception);  
         }  
     };  
-  
+    
     @Override  
     public void onCreate(Bundle savedInstanceState) {  
         super.onCreate(savedInstanceState);  
+        //must be login button. used to open facebook share dialog in the sendRequestDialog()
         uiHelper = new UiLifecycleHelper(getActivity(), callback);  
         uiHelper.onCreate(savedInstanceState);  
 
@@ -52,12 +51,14 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,  
             Bundle savedInstanceState) {  
         View view = inflater.inflate(R.layout.activity_social_facebook_login_yao, container, false);  
-  
+        
+        //set the permission of willpower in user's Facebook
         LoginButton authButton = (LoginButton) view  
                 .findViewById(R.id.login_button);  
         authButton.setFragment(this);  
 //        authButton.setReadPermissions(Arrays  
 //                .asList("email","user_likes", "user_status"));
+        //need the publish permission to publish photo to timeline
         authButton.setPublishPermissions(Arrays  
                 .asList("publish_actions", "publish_stream"));
         sendRequestButton = (Button) view.findViewById(R.id.sendRequestButton);
@@ -74,7 +75,6 @@ public class MainFragment extends Fragment {
 	private void onSessionStateChange(Session session, SessionState state, Exception exception) {
 	    if (state.isOpened()) {
 	        sendRequestButton.setVisibility(View.VISIBLE);
-//	        sendRequestDialog();
 	    } else if (state.isClosed()) {
 	        sendRequestButton.setVisibility(View.INVISIBLE);
 	    }
@@ -84,6 +84,7 @@ public class MainFragment extends Fragment {
 
 		if(FacebookDialog.canPresentShareDialog(this.getActivity(), FacebookDialog.ShareDialogFeature.SHARE_DIALOG))
 		{
+			//if the Facebook application has been installed in user's device
 			FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this.getActivity())
 	        .setLink("http://developer.android.com/intl/zh-cn/index.html")
 	        .setDescription("This is SDK test")
@@ -94,10 +95,11 @@ public class MainFragment extends Fragment {
 			uiHelper.trackPendingDialogCall(shareDialog.present());	
 			Toast.makeText(this.getActivity(), "Your achivement has shared with your friends!",
 					   Toast.LENGTH_LONG).show();
+			overflag = true;
 		}
 		else
 		{
-			
+			//if the facebook app did not installed in user's device
 			WebView myWebView = new WebView(getActivity());
 			myWebView.getSettings().setUserAgentString("Mozilla/5.0 (compatible; MSIE 10.0; Windows Phone 8.0; Trident/6.0; IEMobile/10.0; ARM; Touch; NOKIA; Lumia 920)");
 			myWebView.getSettings().setLoadWithOverviewMode(true);
@@ -145,28 +147,13 @@ public class MainFragment extends Fragment {
         }  
   
         uiHelper.onResume();  
+        if(overflag)
+        {
+        	finish();
+        	overflag = false;
+        }
+        	
     }  
-  
-    @Override  
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {  
-
-	        super.onActivityResult(requestCode, resultCode, data);
-	
-	        uiHelper.onActivityResult(requestCode, resultCode, data, new FacebookDialog.Callback() {
-	            @Override
-	            public void onError(FacebookDialog.PendingCall pendingCall, Exception error, Bundle data) {
-	                Log.e("Activity", String.format("Error: %s", error.toString()));
-	            }
-	
-	            @Override
-	            public void onComplete(FacebookDialog.PendingCall pendingCall, Bundle data) {
-	                Log.i("Activity", "Success!");
-	                
-	                finish();
-	            }
-	        });
-    }  
-
 
     public void finish()
     {
@@ -190,4 +177,25 @@ public class MainFragment extends Fragment {
         super.onSaveInstanceState(outState);  
         uiHelper.onSaveInstanceState(outState);  
     }  
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		//must implement, if not the login button is not correct
+		uiHelper.onActivityResult(requestCode, resultCode, data, new Callback(){
+
+			@Override
+			public void onComplete(PendingCall pendingCall, Bundle data) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onError(PendingCall pendingCall, Exception error,
+					Bundle data) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+	}
 }  

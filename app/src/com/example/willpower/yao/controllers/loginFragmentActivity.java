@@ -1,17 +1,8 @@
 package com.example.willpower.yao.controllers;
-import java.io.EOFException;
-import java.security.MessageDigest;
-
 import com.example.willpower.controllers.R;
 
-import android.app.Activity;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Base64;
-import android.util.Log;
 import android.view.Menu;
 
 public class loginFragmentActivity extends FragmentActivity {
@@ -20,7 +11,7 @@ public class loginFragmentActivity extends FragmentActivity {
 
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState); 
-
+	    
         if (savedInstanceState == null) {  
             // Add the fragment on initial activity setup  
             mainFragment = new MainFragment();  
@@ -33,6 +24,8 @@ public class loginFragmentActivity extends FragmentActivity {
            mainFragment = (MainFragment) getSupportFragmentManager()  
            .findFragmentById(android.R.id.content);  
        }  
+        /***
+        //print the sha key of each machine
        try
        {
     	   PackageInfo info = getPackageManager().getPackageInfo(this.getPackageName(),  PackageManager.GET_SIGNATURES);
@@ -48,6 +41,7 @@ public class loginFragmentActivity extends FragmentActivity {
        {
     	   
        }
+       ***/
 	}
 
 	   @Override  
