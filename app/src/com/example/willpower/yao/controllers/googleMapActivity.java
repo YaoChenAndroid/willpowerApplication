@@ -244,7 +244,7 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 		          return;
 		        }
 		        final ParseGeoPoint myPoint = geoPointFromLocation(myLoc);
-		        if(arg0.size() == 1){//if current user has record in the server, update
+		        if(arg0.size() > 0){//if current user has record in the server, update
 		        	arg0.get(0).setLocation(myPoint);
 		        	arg0.get(0).saveInBackground(new SaveCallback(){
 						@Override
@@ -262,6 +262,7 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 			        loc.setText(username);
 			        ParseACL acl = new ParseACL();
 			        acl.setPublicReadAccess(true);
+			        acl.setPublicWriteAccess(true);
 			        loc.setACL(acl);
 			        //Updata the location data
 			        loc.saveInBackground(new SaveCallback(){
