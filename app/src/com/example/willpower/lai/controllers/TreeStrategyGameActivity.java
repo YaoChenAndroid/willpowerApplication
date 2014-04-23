@@ -24,6 +24,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +50,7 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 	private ReentrantLock treeMainLock = new ReentrantLock();
 	
 	private LinearLayout mTreeStrategyLinearLayout;
+	private ProgressBar mTreeStrategyCountDownBar;
 	private TextView mTreeGameCountDown;
 	private TextView mTreeGameMessage;
 	private Button mCut_new_tree_lai;
@@ -57,6 +59,7 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 	private Button mSave_current_game_lai;
 	
 	private int mCountDown = 15;
+	private int progressInt = 0;
 	private boolean isNewPeriod = false;
 	private boolean mBlinkTimer = true;
 	
@@ -73,6 +76,9 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 		
 		mTreeGameCountDown = (TextView) findViewById(R.id.TreeGameCountDown);
 		mTreeGameMessage = (TextView) findViewById(R.id.TreeGameMessage);
+		
+		mTreeStrategyCountDownBar = (ProgressBar) findViewById(R.id.TreeGame_periodProgressBar_lai);
+		mTreeStrategyCountDownBar.setProgress(0);
 		
 		mCut_new_tree_lai = (Button)findViewById(R.id.cut_new_tree_lai);
 		mPlant_new_tree_lai = (Button) findViewById(R.id.plant_new_tree_lai);
@@ -137,6 +143,8 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 		@Override
 		public void run() {
 			mCountDown -- ;
+			//progressInt += (int)(100/mCountDown);
+			mTreeStrategyCountDownBar.setProgress(progressInt);
 			if (mCountDown > 5) {
 				mTreeGameCountDown.setTextColor(Color.parseColor("#00FF00"));
 			} else {
@@ -151,6 +159,7 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 			mTreeGameCountDown.setText("  Next Period: " + mCountDown + " s.");
 			if (mCountDown == 0) {
 				isNewPeriod = true;
+				mTreeStrategyCountDownBar.setProgress(0);
 			}
 			treeHandler.postDelayed(this, 1000);
 		}
