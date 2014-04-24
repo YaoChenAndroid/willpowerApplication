@@ -35,7 +35,7 @@
         		android:id="@+id/tree_strategy_continue"
         		android:layout_width="wrap_content"
         		android:layout_height="wrap_content"
-        		android:background="@drawable/tree_strategy_continue_icon" />
+        		android:background="@drawable/tree_strategy_continue_disable_icon" />
     
     		<ImageButton
          		android:id="@+id/tree_strategy_new_game"

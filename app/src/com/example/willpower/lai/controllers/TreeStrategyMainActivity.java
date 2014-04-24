@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
@@ -50,25 +51,32 @@ public class TreeStrategyMainActivity extends Activity {
 		mTreeStrategyBackToMain = (ImageButton)findViewById(R.id.tree_strategy_back_to_main);
 		
 		ArrayList<TreeGameObject> log = db.getAllTreeGameObject();
+		Log.d("TreeStrategy", "(Variable Value)check whether have saved game: " + log.size());
 		if (log.size() == 0) {
+			mTreeStrategyContinue.setBackground(getResources().getDrawable(R.drawable.tree_strategy_continue_disable_icon));
 			mTreeStrategyContinue.setClickable(false);
+		} else {
+			mTreeStrategyContinue.setBackground(getResources().getDrawable(R.drawable.tree_strategy_continue_icon));
+			mTreeStrategyContinue.setClickable(true);
+			mTreeStrategyContinue.setOnClickListener(new View.OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					Log.d("TreeStrategy", "(LoadModule)Continue game model.");
+					Intent continueGame = new Intent(TreeStrategyMainActivity.this, TreeStrategyGameActivity.class);
+					startActivityForResult(continueGame, START_TREE_STRATEGY_CONTINUE);
+				}
+				
+			});
 		}
 		
 		mTreeStrategyNewGame.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
+				Log.d("TreeStrategy", "(LoadModule)Start new game model.");
 				Intent newGame = new Intent(TreeStrategyMainActivity.this, TreeStrategyGameActivity.class);
 				startActivityForResult(newGame, START_TREE_STRATEGY_NEW_GAME);
-			}
-			
-		});
-		mTreeStrategyContinue.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent continueGame = new Intent(TreeStrategyMainActivity.this, TreeStrategyGameActivity.class);
-				startActivityForResult(continueGame, START_TREE_STRATEGY_CONTINUE);
 			}
 			
 		});
@@ -76,6 +84,7 @@ public class TreeStrategyMainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
+				Log.d("TreeStrategy", "(LoadModule)View score model.");
 				Intent viewScore = new Intent(TreeStrategyMainActivity.this, TreeStrategyViewScoreActivity.class);
 				startActivityForResult(viewScore, START_TREE_STRATEGY_VIEW_SCORE);
 			}
@@ -85,6 +94,7 @@ public class TreeStrategyMainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
+				Log.d("TreeStrategy", "(LoadModule)Back to main model.");
 				Intent backToMain = new Intent(TreeStrategyMainActivity.this, com.example.willpower.controllers.MainActivity.class);
 				startActivity(backToMain);
 			}

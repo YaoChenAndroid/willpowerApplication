@@ -9,6 +9,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class TreeStrategyGameDatabaseHelper extends SQLiteOpenHelper{
 
@@ -37,6 +38,7 @@ public class TreeStrategyGameDatabaseHelper extends SQLiteOpenHelper{
 				+ COLUMN_CURRENTACRES + " bigint, " + COLUMN_CURRENTCREDITS + " bigint, "
 				+ COLUMN_CURRENTMAINTAINPERACRE + " bigint, " + COLUMN_CURRENTVALUEPERACRE + " bigint)";
 		db.execSQL(create_table);
+		Log.d("TreeStrategy", "(Initialize)Start database model.");
 	}
 
 	@Override
@@ -62,6 +64,7 @@ public class TreeStrategyGameDatabaseHelper extends SQLiteOpenHelper{
 	 */
 	public void insertTreeGameObject(TreeGameObject tgo) {
 		insertTreeBasic(tgo);
+		Log.d("TreeStrategy", "(Action)Inert new tree object.");
 	}
 	
 	/**
@@ -70,6 +73,7 @@ public class TreeStrategyGameDatabaseHelper extends SQLiteOpenHelper{
 	public void clearTreeTables() {
 		SQLiteDatabase db = this.getReadableDatabase();
 		db.delete(TABLE_TREESTRATEGY, null, null);
+		Log.d("TreeStrategy", "(Action)Clear all items in table.");
 	}
 	
 	/**
@@ -96,6 +100,7 @@ public class TreeStrategyGameDatabaseHelper extends SQLiteOpenHelper{
 			tgoList.add(tgo);
 		}
 		
+		Log.d("TreeStrategy", "(Action)Return all current saved items.");
 		return tgoList;
 	}
 	
@@ -105,6 +110,7 @@ public class TreeStrategyGameDatabaseHelper extends SQLiteOpenHelper{
 	public void saveTreeGame(TreeGameObject tgo) {
 		clearTreeTables();
 		insertTreeGameObject(tgo);
+		Log.d("TreeStrategy", "(Action)Save current game status.");
 	}
 
 }
