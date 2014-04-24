@@ -16,13 +16,14 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class TreeStrategyMainActivity extends Activity {
 
 	private LinearLayout mTreeStrategyLinearLayout;
-	private TextView mTreeStrategyTitle;
+	private ImageView mTreeStrategyTitle;
 	private TextView mTreeStrategyAuthor;
 	private Button mTreeStrategyNewGame;
 	private Button mTreeStrategyContinue;
@@ -49,7 +50,7 @@ public class TreeStrategyMainActivity extends Activity {
 		mTreeStrategyLinearLayout = (LinearLayout)findViewById(R.id.tree_strategy_background);
 		mTreeStrategyLinearLayout.setBackground(getResources().getDrawable(R.drawable.tree_strategy_background));
 		
-		mTreeStrategyTitle = (TextView)findViewById(R.id.tree_strategy_title);
+		mTreeStrategyTitle = (ImageView)findViewById(R.id.tree_strategy_title);
 		mTreeStrategyAuthor = (TextView)findViewById(R.id.tree_strategy_author);
 		
 		mHandler.postDelayed(titleBlink, 0);
@@ -107,11 +108,11 @@ public class TreeStrategyMainActivity extends Activity {
 		@Override
 		public void run() {
 			if (mBlink_flag) {
-				mTreeStrategyTitle.setText("Tree Strategy\n\n");
+				mTreeStrategyTitle.setImageResource(R.drawable.tree_strategy_title);
 				mTreeStrategyAuthor.setText("Lai Wang, 0488605");
 				mBlink_flag = false;
 			} else {
-				mTreeStrategyTitle.setText(" \n\n");
+				mTreeStrategyTitle.setImageDrawable(null);
 				mTreeStrategyAuthor.setText(" ");
 				mBlink_flag = true;
 			}
