@@ -3,32 +3,27 @@ package com.example.willpower.lai.controllers;
 import java.util.ArrayList;
 
 import com.example.willpower.controllers.R;
-import com.example.willpower.controllers.R.layout;
-import com.example.willpower.controllers.R.menu;
 import com.example.willpower.lai.SQLiteOpenHelper.TreeStrategyGameDatabaseHelper;
 import com.example.willpower.lai.models.TreeGameObject;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class TreeStrategyMainActivity extends Activity {
 
 	private LinearLayout mTreeStrategyLinearLayout;
 	private ImageView mTreeStrategyTitle;
-	private TextView mTreeStrategyAuthor;
-	private Button mTreeStrategyNewGame;
-	private Button mTreeStrategyContinue;
-	private Button mTreeStrategyViewScore;
-	private Button mTreeStrategyBackToMain;
+	private ImageButton mTreeStrategyNewGame;
+	private ImageButton mTreeStrategyContinue;
+	private ImageButton mTreeStrategyViewScore;
+	private ImageButton mTreeStrategyBackToMain;
 	
 	private TreeStrategyGameDatabaseHelper db = new TreeStrategyGameDatabaseHelper(TreeStrategyMainActivity.this);
 	
@@ -38,27 +33,21 @@ public class TreeStrategyMainActivity extends Activity {
 	public static final int START_TREE_STRATEGY_CONTINUE = 22;
 	public static final int START_TREE_STRATEGY_VIEW_SCORE = 23;
 	
-	private Handler mHandler = new Handler();
-	private int mBlink_interval = 1000;
-	private boolean mBlink_flag = true;
-	
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_tree_strategy_main_lai);
 		mTreeStrategyLinearLayout = (LinearLayout)findViewById(R.id.tree_strategy_background);
-		mTreeStrategyLinearLayout.setBackground(getResources().getDrawable(R.drawable.tree_strategy_background));
+		mTreeStrategyLinearLayout.setBackground(getResources().getDrawable(R.drawable.tree_strategy_main_background));
 		
 		mTreeStrategyTitle = (ImageView)findViewById(R.id.tree_strategy_title);
-		mTreeStrategyAuthor = (TextView)findViewById(R.id.tree_strategy_author);
+		mTreeStrategyTitle.setImageResource(R.drawable.tree_strategy_title2);
 		
-		mHandler.postDelayed(titleBlink, 0);
-		
-		mTreeStrategyNewGame = (Button)findViewById(R.id.tree_strategy_new_game);
-		mTreeStrategyContinue = (Button)findViewById(R.id.tree_strategy_continue);
-		mTreeStrategyViewScore = (Button)findViewById(R.id.tree_strategy_view_score);
-		mTreeStrategyBackToMain = (Button)findViewById(R.id.tree_strategy_back_to_main);
+		mTreeStrategyNewGame = (ImageButton)findViewById(R.id.tree_strategy_new_game);
+		mTreeStrategyContinue = (ImageButton)findViewById(R.id.tree_strategy_continue);
+		mTreeStrategyViewScore = (ImageButton)findViewById(R.id.tree_strategy_view_score);
+		mTreeStrategyBackToMain = (ImageButton)findViewById(R.id.tree_strategy_back_to_main);
 		
 		ArrayList<TreeGameObject> log = db.getAllTreeGameObject();
 		if (log.size() == 0) {
@@ -102,24 +91,6 @@ public class TreeStrategyMainActivity extends Activity {
 			
 		});
 	}
-	
-	private Runnable titleBlink = new Runnable() {
-
-		@Override
-		public void run() {
-			if (mBlink_flag) {
-				mTreeStrategyTitle.setImageResource(R.drawable.tree_strategy_title);
-				mTreeStrategyAuthor.setText("Lai Wang, 0488605");
-				mBlink_flag = false;
-			} else {
-				mTreeStrategyTitle.setImageDrawable(null);
-				mTreeStrategyAuthor.setText(" ");
-				mBlink_flag = true;
-			}
-			mHandler.postDelayed(this, mBlink_interval);
-		}
-		
-	};
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
