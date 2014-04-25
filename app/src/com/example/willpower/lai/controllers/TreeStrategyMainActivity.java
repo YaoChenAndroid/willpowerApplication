@@ -79,29 +79,35 @@ public class TreeStrategyMainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Log.d("TreeStrategy", "(LoadModule)Start new game model.");
-				AlertDialog.Builder builder = new AlertDialog.Builder(TreeStrategyMainActivity.this, android.R.style.Theme_Translucent);
-				builder.setIcon(R.drawable.tree_dialog_icon);
-				builder.setMessage("Start a new game will lost your previous record, are you sure you want to start a new game?");
-				builder.setCancelable(false);
-				builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						db.clearTreeTables();
-						Intent newGame = new Intent(TreeStrategyMainActivity.this, TreeStrategyGameActivity.class);
-						startActivityForResult(newGame, START_TREE_STRATEGY_NEW_GAME);
-					}
-				});
-				builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.cancel();
-					}
-				});
-				AlertDialog alertDialog = builder.create();
-				alertDialog.getWindow().setGravity(Gravity.CENTER);
-				alertDialog.show();
+				ArrayList<TreeGameObject> log = db.getAllTreeGameObject();
+				if (log.size() == 0) {
+					Intent newGame = new Intent(TreeStrategyMainActivity.this, TreeStrategyGameActivity.class);
+					startActivityForResult(newGame, START_TREE_STRATEGY_NEW_GAME);
+				} else {
+					AlertDialog.Builder builder = new AlertDialog.Builder(TreeStrategyMainActivity.this, android.R.style.Theme_Translucent);
+					builder.setIcon(R.drawable.tree_dialog_icon);
+					builder.setMessage("Start a new game will lost your previous record, are you sure you want to start a new game?");
+					builder.setCancelable(false);
+					builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							db.clearTreeTables();
+							Intent newGame = new Intent(TreeStrategyMainActivity.this, TreeStrategyGameActivity.class);
+							startActivityForResult(newGame, START_TREE_STRATEGY_NEW_GAME);
+						}
+					});
+					builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.cancel();
+						}
+					});
+					AlertDialog alertDialog = builder.create();
+					alertDialog.getWindow().setGravity(Gravity.CENTER);
+					alertDialog.show();
+				}
 			}
 			
 		});
