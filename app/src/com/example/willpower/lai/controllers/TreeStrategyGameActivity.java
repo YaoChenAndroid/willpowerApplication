@@ -1,6 +1,7 @@
 package com.example.willpower.lai.controllers;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.example.willpower.controllers.R;
@@ -8,11 +9,11 @@ import com.example.willpower.lai.SQLiteOpenHelper.TreeStrategyGameDatabaseHelper
 import com.example.willpower.lai.models.TreeGameObject;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,7 +27,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,7 +52,6 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 	private ReentrantLock treeMainLock = new ReentrantLock();
 	
 	private LinearLayout mTreeStrategyLinearLayout;
-	private ProgressBar mTreeStrategyCountDownBar;
 	private TextView mTreeGameCountDown;
 	private TextView mTreeGameMessage;
 	private Button mCut_new_tree_lai;
@@ -60,8 +59,9 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 	private Button mBack_to_main_lai;
 	private Button mSave_current_game_lai;
 	
+	private LinkedList<String> mMsgQueue = new LinkedList<String>();
+	
 	private int mCountDown = 15;
-	private int progressInt = 0;
 	private boolean isNewPeriod = false;
 	private boolean mBlinkTimer = true;
 	
@@ -74,13 +74,10 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_tree_strategy_game_lai);
 		mTreeStrategyLinearLayout = (LinearLayout)findViewById(R.id.tree_strategy_game_background);
-		mTreeStrategyLinearLayout.setBackground(getResources().getDrawable(R.drawable.tree_strategy_background));
+		mTreeStrategyLinearLayout.setBackground(getResources().getDrawable(R.drawable.tree_strategy_game_background2));
 		
 		mTreeGameCountDown = (TextView) findViewById(R.id.TreeGameCountDown);
 		mTreeGameMessage = (TextView) findViewById(R.id.TreeGameMessage);
-		
-		mTreeStrategyCountDownBar = (ProgressBar) findViewById(R.id.TreeGame_periodProgressBar_lai);
-		mTreeStrategyCountDownBar.setProgress(0);
 		
 		mCut_new_tree_lai = (Button)findViewById(R.id.cut_new_tree_lai);
 		mPlant_new_tree_lai = (Button) findViewById(R.id.plant_new_tree_lai);
@@ -94,8 +91,9 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 		checkIsNewGame();
 		
 		treeHandler.postDelayed(printResult, 0);
-		treeHandler.postDelayed(gameDevelopThread, period_time);
-		treeHandler.postDelayed(gameTimer, 0);
+		mGameCountDown.start();
+//		treeHandler.postDelayed(gameDevelopThread, period_time);
+//		treeHandler.postDelayed(gameTimer, 0);
 	}
 
 	/**
@@ -167,84 +165,59 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 	}
 	
 	/**
-	 * countdown timer, so that we can see the left time in current period
-	 */
-	private Runnable gameTimer = new Runnable() {
-
-		@Override
-		public void run() {
-			mCountDown -- ;
-			//progressInt += (int)(100/mCountDown);
-			mTreeStrategyCountDownBar.setProgress(progressInt);
-			if (mCountDown > 5) {
-				mTreeGameCountDown.setTextColor(Color.parseColor("#00FF00"));
-			} else {
-				if (mBlinkTimer) {
-					mTreeGameCountDown.setTextColor(Color.parseColor("#FFFFFF"));
-					mBlinkTimer = false;
-				} else {
-					mTreeGameCountDown.setTextColor(Color.parseColor("#00FF00"));
-					mBlinkTimer = true;
-				}
-			}
-			mTreeGameCountDown.setText("  Next Period: " + mCountDown + " s.");
-			if (mCountDown == 0) {
-				isNewPeriod = true;
-				mTreeStrategyCountDownBar.setProgress(0);
-			}
-			treeHandler.postDelayed(this, 1000);
-		}
-		
-	};
-	
-	/**
 	 * new runnable to handle the data
 	 * when game starts, acres will increase per period time
 	 * however if user current credits can't afford to maintain trees
 	 * acres will stop to increase, and then decrease per period time by the same
 	 * rate until current credits can afford to maintain trees or game over.
 	 */
-	private Runnable gameDevelopThread = new Runnable() {
+	private CountDownTimer mGameCountDown = new CountDownTimer(period_time, 1000) {
 
 		@Override
-		public void run() {
-			if (isNewPeriod) {
-				mCountDown = 15;
-				isNewPeriod = false;
-			}
+		public void onTick(long millisUntilFinished) {
+			mTreeGameCountDown.setTextColor(Color.GREEN);
+			mTreeGameCountDown.setText("   " + millisUntilFinished / 1000);
+		}
+
+		@Override
+		public void onFinish() {
 			treeMainLock.lock();
 			try {
-				long totalMaintain = mCurrentAcres * mCurrentMaintainPerAcre;
-				if (totalMaintain > mCurrentCredits) {
-					if (!notEnough) {
-						notEnough = true;
-						toastAnnounce("Our credits are not enough!");
-					} else {
-						if (mCurrentAcres == 0) {
-							toastAnnounce("Game Over");
-							treeHandler.removeCallbacks(this);
-							treeHandler.removeCallbacks(gameTimer);
+				if (mCurrentCredits == 0 && mCurrentAcres == 0) {
+					toastAnnounce("Game Over");
+					this.cancel();
+					AlertDialog.Builder builder = new AlertDialog.Builder(TreeStrategyGameActivity.this, 
+							android.R.style.Theme_Translucent_NoTitleBar);
+					builder.setTitle("Game Over");
+					builder.setMessage("You failed to achieve your goals.");
+					builder.setCancelable(false);
+					builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							startActivity(new Intent(TreeStrategyGameActivity.this, TreeStrategyMainActivity.class));
 						}
-						mCurrentAcres = (long) (mCurrentAcres * (1 - mCurrentIncreaseRate));
-					}
+					});
+					AlertDialog alertDialog = builder.create();
+					alertDialog.show();
 				} else {
-					notEnough = false;
-					if (totalMaintain == mCurrentCredits) {
-						if (mCurrentCredits == 0) {
-							toastAnnounce("Game Over");
-							treeHandler.removeCallbacks(this);
-							treeHandler.removeCallbacks(gameTimer);
+					long curr_total_maintain = mCurrentAcres * mCurrentMaintainPerAcre;
+					if (mCurrentCredits < curr_total_maintain) {
+						if (notEnough) {
+							mCurrentAcres = (long) (mCurrentAcres * (1 - mCurrentIncreaseRate));
 						} else {
-							toastAnnounce("Our credits are running low!");
+							notEnough = true;
 						}
+					} else {
+						notEnough = false;
+						mCurrentCredits = mCurrentCredits - curr_total_maintain;
+						mCurrentAcres = (long) (mCurrentAcres * (1 + mCurrentIncreaseRate));
 					}
-					mCurrentCredits = mCurrentCredits - totalMaintain;
-					mCurrentAcres = (long) (mCurrentAcres * (1 + mCurrentIncreaseRate));
 				}
 			} finally {
 				treeMainLock.unlock();
 			}
-			treeHandler.postDelayed(this, period_time);
+			this.start();
 		}
 		
 	};
@@ -475,6 +448,20 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 	}
 	
 	/**
+	 * set a message queue, so that we can print out message.
+	 */
+	public void printMsgQueue() {
+		
+	}
+	
+	/**
+	 * put a message into queue
+	 */
+	public void putMsgQueue(String msg) {
+		mMsgQueue.push(msg);
+	}
+	
+	/**
 	 * toast, makeText function
 	 */
 	public void toastAnnounce(String text) {
@@ -492,8 +479,6 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 		super.onStop();
 //		helper.saveTreeGame(createGameObject());
 		treeHandler.removeCallbacks(printResult);
-		treeHandler.removeCallbacks(gameDevelopThread);
-		treeHandler.removeCallbacks(gameTimer);
 	}
 	
 	@Override
