@@ -54,16 +54,16 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 	private LinearLayout mTreeStrategyLinearLayout;
 	private TextView mTreeGameCountDown;
 	private TextView mTreeGameMessage;
+	private TextView mTreeGameCurrentAcres;
+	private TextView mTreeGameCurrentMoney;
 	private Button mCut_new_tree_lai;
 	private Button mPlant_new_tree_lai;
 	private Button mBack_to_main_lai;
 	private Button mSave_current_game_lai;
 	
 	private LinkedList<String> mMsgQueue = new LinkedList<String>();
-	
-	private int mCountDown = 15;
-	private boolean isNewPeriod = false;
-	private boolean mBlinkTimer = true;
+	private String mCurrentMessage;
+	private int msg_period = 3 * 1000;
 	
 	
 //	private View plantNewTreeView;
@@ -78,6 +78,8 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 		
 		mTreeGameCountDown = (TextView) findViewById(R.id.TreeGameCountDown);
 		mTreeGameMessage = (TextView) findViewById(R.id.TreeGameMessage);
+		mTreeGameCurrentAcres = (TextView) findViewById(R.id.tree_strategy_printcurrentacres);
+		mTreeGameCurrentMoney = (TextView) findViewById(R.id.tree_strategy_printcurrentmoney);
 		
 		mCut_new_tree_lai = (Button)findViewById(R.id.cut_new_tree_lai);
 		mPlant_new_tree_lai = (Button) findViewById(R.id.plant_new_tree_lai);
@@ -91,6 +93,7 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 		checkIsNewGame();
 		
 		treeHandler.postDelayed(printResult, 0);
+		treeHandler.postDelayed(printMsg, 0);
 		mGameCountDown.start();
 //		treeHandler.postDelayed(gameDevelopThread, period_time);
 //		treeHandler.postDelayed(gameTimer, 0);
@@ -186,6 +189,8 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 				if (mCurrentCredits == 0 && mCurrentAcres == 0) {
 					toastAnnounce("Game Over");
 					this.cancel();
+					treeHandler.removeCallbacks(printMsg);
+					treeHandler.removeCallbacks(printResult);
 					AlertDialog.Builder builder = new AlertDialog.Builder(TreeStrategyGameActivity.this, 
 							android.R.style.Theme_Translucent_NoTitleBar);
 					builder.setTitle("Game Over");
@@ -204,14 +209,27 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 					long curr_total_maintain = mCurrentAcres * mCurrentMaintainPerAcre;
 					if (mCurrentCredits < curr_total_maintain) {
 						if (notEnough) {
+							long previous = mCurrentAcres;
 							mCurrentAcres = (long) (mCurrentAcres * (1 - mCurrentIncreaseRate));
+							String msg = "Not enough money to maintain current trees!";
+							putMsgQueue(msg, false);
+							msg = "Your forest has decreased by " + (previous - mCurrentAcres) + " acres!";
+							putMsgQueue(msg, false);
 						} else {
 							notEnough = true;
+							String msg = "Not enough money to maintain current trees!";
+							putMsgQueue(msg, false);
 						}
 					} else {
 						notEnough = false;
 						mCurrentCredits = mCurrentCredits - curr_total_maintain;
+						long previous = mCurrentAcres;
 						mCurrentAcres = (long) (mCurrentAcres * (1 + mCurrentIncreaseRate));
+						String msg = "You've paid " + curr_total_maintain
+								+ " to maintain your trees!";
+						putMsgQueue(msg, true);
+						msg = "Your forest has increased by " + (mCurrentAcres - previous) + " acres!";
+						putMsgQueue(msg, true);
 					}
 				}
 			} finally {
@@ -229,10 +247,27 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 
 		@Override
 		public void run() {
-			String result = "Tree Acres: " + mCurrentAcres + "\n"
-					+ "Current Money: " + mCurrentCredits;
-			mTreeGameMessage.setText(result);
+			if (mCurrentMessage == null) {
+				mTreeGameMessage.setText("");
+			} else {
+				mTreeGameMessage.setText(mCurrentMessage);
+			}
+			mTreeGameCurrentAcres.setText("   " + mCurrentAcres);
+			mTreeGameCurrentMoney.setText("   " + mCurrentCredits);
 			treeHandler.postDelayed(this, printResult_interval);
+		}
+		
+	};
+	
+	/**
+	 * new thread that runs on background to process the message queue
+	 */
+	private Runnable printMsg = new Runnable() {
+
+		@Override
+		public void run() {
+			printMsgQueue();
+			treeHandler.postDelayed(this, msg_period);
 		}
 		
 	};
@@ -451,14 +486,23 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 	 * set a message queue, so that we can print out message.
 	 */
 	public void printMsgQueue() {
-		
+		if (mMsgQueue.isEmpty()) {
+			mCurrentMessage = null;
+		} else {
+			mCurrentMessage = mMsgQueue.pop();
+		}
 	}
 	
 	/**
 	 * put a message into queue
 	 */
-	public void putMsgQueue(String msg) {
+	public void putMsgQueue(String msg, boolean colorFlag) {
 		mMsgQueue.push(msg);
+		if (colorFlag) {
+			mTreeGameMessage.setTextColor(Color.GREEN);
+		} else {
+			mTreeGameMessage.setTextColor(Color.RED);
+		}
 	}
 	
 	/**
@@ -479,6 +523,7 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 		super.onStop();
 //		helper.saveTreeGame(createGameObject());
 		treeHandler.removeCallbacks(printResult);
+		treeHandler.removeCallbacks(printMsg);
 	}
 	
 	@Override
