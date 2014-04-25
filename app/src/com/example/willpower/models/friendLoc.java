@@ -5,16 +5,16 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-@ParseClassName("Posts")
+@ParseClassName("Location")
 public class friendLoc extends ParseObject{
-
+	private final static String TAG = "friendLoc";
 	public String getText()
 	{
-		return getString("text");
+		return getString("name");
 	}
 	public void setText(String value)
 	{
-		put("text", value);
+		put("name", value);
 	}
 	public ParseGeoPoint getLocation()
 	{

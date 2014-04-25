@@ -9,6 +9,10 @@
         
         <string name="yao_social_error_map_data">Google Map data</string>
         <string name="yao_social_error_map_data_message">Google Map data is wrong</string>
+        <string name="yao_social_error_map_GPS_close">Please open the GPS service and try again after your location appears on the map.</string>
+
+        <string name="yao_social_infor_map_friend_duplicatoin">You are already friends!</string>        
+        <string name="yao_social_infor_map_add_friend">Click to me to add friends!</string>
         <color name="light_gray">#7cd12e</color>
 	    <color name="gray">#938192</color>
 	    <color name="trans">#00000000</color>

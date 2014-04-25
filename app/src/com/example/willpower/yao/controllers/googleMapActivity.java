@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.example.willpower.models.friendLoc;
-
+import com.example.willpower.models.userFriend;
 import com.example.willpower.controllers.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -19,6 +19,8 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -43,8 +45,12 @@ import android.widget.Toast;
 
 public class googleMapActivity extends FragmentActivity implements LocationListener,
 	ConnectionCallbacks,
+	OnInfoWindowClickListener,
 	GooglePlayServicesClient.OnConnectionFailedListener{
+	  private final static String TAG = "googleMapActivity";
 	  private String username = "YaoChen";
+	  private String curUserID;
+	  private String friendID;
 	  
 	  //parse data
 	  private static final int MAX_POST_SEARCH_DISTANCE = 100;
@@ -103,6 +109,7 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 				doMapQuery();
 			}	    	
 	    });
+	    map.setOnInfoWindowClickListener(this);
 	    if(GooglePlayServicesUtil.isGooglePlayServicesAvailable( getApplicationContext() ) == ConnectionResult.SUCCESS)
 	    	Log.i("YaoChen", "Successful!");
 	    else
@@ -196,15 +203,12 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 							new MarkerOptions().position(new LatLng(loc.getLocation().getLatitude(), loc.getLocation().getLongitude()));
 					if(oldMarker != null)
 					{
-						if(oldMarker.getSnippet() == null)
-							continue;
-						else
-						{
-							oldMarker.remove();
-						}
+						oldMarker.remove();
 					}
+					
 					markerOpts = 
 							markerOpts.title(loc.getText())
+							.snippet( getResources().getString(R.string.yao_social_infor_map_add_friend))
 							.icon(BitmapDescriptorFactory.defaultMarker(
 									BitmapDescriptorFactory.HUE_ROSE));
 					
@@ -229,7 +233,7 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 	{
         //save current location to parse
         ParseQuery<friendLoc> locQuery = friendLoc.getQuery();   
-        locQuery.whereEqualTo("text", username);
+        locQuery.whereEqualTo("name", username);
         locQuery.findInBackground(new FindCallback<friendLoc>(){
 
 			@Override
@@ -240,7 +244,7 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 		        Location myLoc = (currentLocation == null) ? lastLocation : currentLocation;
 		        if (myLoc == null) {
 		          Toast.makeText(googleMapActivity.this,
-		              "Please open the GPS service and try again after your location appears on the map.", Toast.LENGTH_LONG).show();
+		              getResources().getString(R.string.yao_social_error_map_GPS_close), Toast.LENGTH_LONG).show();
 		          return;
 		        }
 		        final ParseGeoPoint myPoint = geoPointFromLocation(myLoc);
@@ -404,5 +408,79 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 		public Dialog onCreateDialog(Bundle savedInstanceState){
 			return mDialog;
 		}
+	}
+	@Override
+	public void onInfoWindowClick(Marker arg0) {
+		// TODO Auto-generated method stub
+		String key = null;
+		for(Map.Entry<String, Marker> entry: mapMarkers.entrySet()){
+			if(arg0.equals(entry.getValue()))
+			{
+				key = entry.getKey();
+				break;
+			}
+		}
+		if(key != null){
+			friendID = key;
+			ParseQuery<userFriend> friendQuery = userFriend.getQuery();  
+			if(friendQuery == null)
+			{
+				saveFriend();
+			}else{
+				friendQuery.whereEqualTo("UserID", curUserID);
+				friendQuery.whereEqualTo("FriendID", friendID);
+				friendQuery.findInBackground(new FindCallback<userFriend>(){
+
+					@Override
+					public void done(List<userFriend> arg0, ParseException e) {
+						if (e != null)
+							return;
+
+						if(arg0 != null && arg0.size() == 0)
+						{
+							saveFriend();						
+						}
+						else{
+							duplicatedFriendsToast();
+						}
+					}
+
+
+				}
+		        );
+			}
+
+		}
+
+	}	
+	private void duplicatedFriendsToast()
+	{
+		Toast.makeText(this, getResources().getString(R.string.yao_social_infor_map_friend_duplicatoin),Toast.LENGTH_LONG).show();
+	}
+	private void saveFriend() {
+		// TODO Auto-generated method stub
+		//add a new friend
+		try
+		{
+			userFriend friend = new userFriend();
+	        friend.setUserID(curUserID);
+	        friend.setFriendID(friendID);
+	        ParseACL acl = new ParseACL();
+	        acl.setPublicReadAccess(true);
+	        acl.setPublicWriteAccess(true);
+	        friend.setACL(acl);
+	        //Updata the location data
+	        friend.saveInBackground(new SaveCallback(){
+				@Override
+				public void done(ParseException arg0) {
+					// TODO Auto-generated method stub
+				}
+	        	
+	        });
+		}catch(Exception e)
+		{
+			Log.e(TAG,e.getMessage());
+		}
+
 	}
 }

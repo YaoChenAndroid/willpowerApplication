@@ -2,6 +2,7 @@ package com.example.willpower.controllers;
 
 import com.example.willpower.controllers.R;
 import com.example.willpower.models.friendLoc;
+import com.example.willpower.models.userFriend;
 import com.example.willpower.yao.controllers.shareActivity;
 import com.parse.Parse;
 import com.parse.ParseObject;
@@ -29,6 +30,7 @@ public class MainActivity extends Activity {
 		//connect service, which only can be connenct once
         Parse.initialize(this, "k67gag0IGiefqnYZHySJmvEiwpEwpi6c1uk5ExUl", "nmRcR7jOVAamqxtL9TmuWA0uBzZoJcJGNYFYVZxz");
 	    ParseObject.registerSubclass(friendLoc.class);
+	    ParseObject.registerSubclass(userFriend.class);
 	}
 
 	@Override
