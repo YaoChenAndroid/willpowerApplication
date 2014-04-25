@@ -95,8 +95,6 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 		treeHandler.postDelayed(printResult, 0);
 		treeHandler.postDelayed(printMsg, 0);
 		mGameCountDown.start();
-//		treeHandler.postDelayed(gameDevelopThread, period_time);
-//		treeHandler.postDelayed(gameTimer, 0);
 	}
 
 	/**
@@ -187,7 +185,6 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 			treeMainLock.lock();
 			try {
 				if (mCurrentCredits == 0 && mCurrentAcres == 0) {
-					toastAnnounce("Game Over");
 					this.cancel();
 					treeHandler.removeCallbacks(printMsg);
 					treeHandler.removeCallbacks(printResult);
@@ -402,7 +399,7 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 		//final EditText creditsEditText = (EditText) cutDownTreesView.findViewById(R.id.tree_cut_down_trees_credits_cost_lai);
 		final TextView cutDownTreesMsg = (TextView) cutDownTreesView.findViewById(R.id.tree_cut_down_trees_msgresult_lai);
 		//creditsEditText.setKeyListener(null);
-		AlertDialog.Builder builder = new AlertDialog.Builder(TreeStrategyGameActivity.this);
+		AlertDialog.Builder builder = new AlertDialog.Builder(TreeStrategyGameActivity.this, android.R.style.Theme_Translucent_NoTitleBar);
 		builder.setTitle("Cut down trees");
 		builder.setView(cutDownTreesView);
 		builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
@@ -524,6 +521,7 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 //		helper.saveTreeGame(createGameObject());
 		treeHandler.removeCallbacks(printResult);
 		treeHandler.removeCallbacks(printMsg);
+		mGameCountDown.cancel();
 	}
 	
 	@Override
