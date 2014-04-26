@@ -6,13 +6,27 @@
         <string name="yao_social_activity_login">socialFacebookActivity</string>
         <string name="yao_social_activity_google_activity">socialGoogleMapActivity</string>
         <string name="yao_social_activity_google_map">Google Map</string>
+        <string name="yao_social_activity_self_login">login</string>
+        <string name="yao_social_activity_register">register</string>
         
         <string name="yao_social_error_map_data">Google Map data</string>
         <string name="yao_social_error_map_data_message">Google Map data is wrong</string>
         <string name="yao_social_error_map_GPS_close">Please open the GPS service and try again after your location appears on the map.</string>
-
         <string name="yao_social_infor_map_friend_duplicatoin">You are already friends!</string>        
         <string name="yao_social_infor_map_add_friend">Click to me to add friends!</string>
+        
+        <string name="yao_login_email">Email Address:</string>
+        <string name="yao_login_name">Name:</string>
+        <string name="yao_login_password">Password:</string>
+        <string name="yao_login_confirm_password">Comfirm Password:</string>
+        <string name="yao_login_button_login">Login</string>
+        <string name="yao_login_button_register">Register</string>
+        <string name="yao_login_button_cancel">Cancel</string>
+        <string name="yao_login_i_empty">This field is required!</string>
+        <string name="yao_login_i_passwordConfirm">Two passwords should be same!</string>
+        <string name="yao_login_i_email_registed">This email address has been registed!</string>
+        <string name="yao_login_i_email_password_error">This email address and password is not match!</string>
+        
         <color name="light_gray">#7cd12e</color>
 	    <color name="gray">#938192</color>
 	    <color name="trans">#00000000</color>

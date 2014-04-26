@@ -1,8 +1,10 @@
 package com.example.willpower.controllers;
 
 import com.example.willpower.controllers.R;
+import com.example.willpower.models.User;
 import com.example.willpower.models.friendLoc;
 import com.example.willpower.models.userFriend;
+import com.example.willpower.yao.controllers.loginActivity;
 import com.example.willpower.yao.controllers.shareActivity;
 import com.parse.Parse;
 import com.parse.ParseObject;
@@ -31,6 +33,7 @@ public class MainActivity extends Activity {
         Parse.initialize(this, "k67gag0IGiefqnYZHySJmvEiwpEwpi6c1uk5ExUl", "nmRcR7jOVAamqxtL9TmuWA0uBzZoJcJGNYFYVZxz");
 	    ParseObject.registerSubclass(friendLoc.class);
 	    ParseObject.registerSubclass(userFriend.class);
+	    ParseObject.registerSubclass(User.class);
 	}
 
 	@Override
@@ -96,7 +99,9 @@ public class MainActivity extends Activity {
 		ib3.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(MainActivity.this, "Button3 is clicked, please override this method to activate game3Activity", 2000).show();
+//				Toast.makeText(MainActivity.this, "Button3 is clicked, please override this method to activate game3Activity", 2000).show();
+				Intent temp = new Intent(MainActivity.this, loginActivity.class);
+				startActivity(temp);
 			}
 		});
 		ib4.setOnClickListener(new View.OnClickListener() {

@@ -71,9 +71,21 @@
             android:name="com.example.willpower.yao.controllers.googleMapActivity"
             android:label="@string/yao_social_activity_google_activity" >
         </activity>
+        
+        <activity
+            android:name="com.example.willpower.yao.controllers.loginActivity"
+            android:label="@string/yao_social_activity_self_login" >
+        </activity>
+        <activity
+            android:name="com.example.willpower.yao.controllers.registerActivity"
+            android:label="@string/yao_social_activity_register" >
+        </activity>
+        
         <activity android:name="com.facebook.LoginActivity"
                   android:theme="@android:style/Theme.Translucent.NoTitleBar"
                   android:label="@string/app_name" />
+
+                
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/app_id"/>
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
         <meta-data
