@@ -49,11 +49,12 @@ public class twitterFriendActivity extends Activity{
                 new int[] {android.R.id.text1,
                            android.R.id.text2});
 		listV.setAdapter(adapter);
+		new asytask(this).execute();		
 	}
 	public class asytask extends AsyncTask<Void, Void, Integer>{
 		private final static String TAG = "asytask";
 		SentimentClassifier sentClassifier;
-		int LIMIT= 500; //the number of retrieved tweets
+		int LIMIT= 3; //the number of retrieved tweets
 		ConfigurationBuilder cb;
 		Twitter twitter;
 		Context mContext;
@@ -78,7 +79,7 @@ public class twitterFriendActivity extends Activity{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			return null;
+			return 0;
 		}
 		private void twitterTest() throws TwitterException, IOException {
 			// TODO Auto-generated method stub
@@ -86,32 +87,13 @@ public class twitterFriendActivity extends Activity{
 			{
 				ConfigurationBuilder cb = new ConfigurationBuilder();
 				cb.setDebugEnabled(true)
-				.setOAuthConsumerKey("8yXwm62e4MlCr74LdraSmrHsr")
-				.setOAuthConsumerSecret("zWvVBAJpKtUBlVwSijbvr5PisF0ZduUynbq8ZLScZApKB3Q9Za")
-				.setOAuthAccessToken("1707416635-O43IwOoi7KTFELhOETm1NWFrD6HGjnBmk9uPy7b")
-				.setOAuthAccessTokenSecret("iOwgtSDKvow4WpAnC0WUTqfylTdxw4bvA27ZC3dUH7C3G");
+				.setOAuthConsumerKey("FyaSuY8cgnlEuGS2MYTf2TeAI")
+				.setOAuthConsumerSecret("AMmBu7ISKyvMIxYsDWNfWHhfEUab5NWEFcvOED30wokqDeeSrR")
+				.setOAuthAccessToken("1707416635-2zvKIA8M9gZOVabPLcJCf6kBusQajYDG8jP1c2V")
+				.setOAuthAccessTokenSecret("GVCTT6eYKuoWikZ9e1zErh15stUZH1m85BT2pcylay8ky");
 				TwitterFactory tf = new TwitterFactory(cb.build());
 				twitter = tf.getInstance();
-				AssetManager am = mContext.getAssets();
-			    InputStream in = null;
-			    OutputStream out = null;
-			      in = am.open("classifier.txt");
 
-			      String outpath= Environment.getExternalStorageDirectory().getAbsolutePath() ; 
-
-			        File outFile = new File(outpath, "/classifier.txt");
-
-
-			      out = new FileOutputStream(outFile);
-		        	byte[] buffer = new byte[1024];
-		        	int bytesRead;
-		        	while((bytesRead = in.read(buffer)) !=-1){
-		        	out.write(buffer, 0, bytesRead);
-		        	}
-			      in.close();
-			      in = null;
-			      out.flush();
-			      out.close();
 				sentClassifier = new SentimentClassifier();
 	//
 //			    twitter4j.Status status =  twitter.updateStatus("YaoChen test");
@@ -140,9 +122,10 @@ public class twitterFriendActivity extends Activity{
 			}
 
 		}
-    	protected void onPostExecute (String res)
+    	protected void onPostExecute (Integer i)
     	{
 			try {
+
 	    		SimpleAdapter adapter = (SimpleAdapter) ((ListView)findViewById(R.id.listViewTwitterFriend)).getAdapter();
 	    		adapter.notifyDataSetChanged();
 			} catch (Exception e) {
@@ -153,15 +136,16 @@ public class twitterFriendActivity extends Activity{
     	}
 		public void performQuery(String inQuery) throws InterruptedException, IOException {
 			Query query = new Query(inQuery);
-			query.setCount(100);
+			query.setCount(20);
 			try {
 				int count=0;
-				QueryResult r;
-
-				do {
-					r = twitter.search(query);
-					ArrayList ts= (ArrayList) r.getTweets();
-		        	data.clear();
+				QueryResult r;			
+	        	data.clear();
+	        	long lastID = Long.MAX_VALUE;
+	        	while(count < LIMIT)
+	        	{
+	        		r = twitter.search(query);
+	        		ArrayList ts= (ArrayList) r.getTweets();
 					for (int i = 0; i < ts.size() && count < LIMIT; i++) {
 						
 						twitter4j.Status t =  (twitter4j.Status)ts.get(i);
@@ -172,10 +156,14 @@ public class twitterFriendActivity extends Activity{
 			    		    datum.put("friends", t.getUser().getScreenName());
 			    		    datum.put("message", t.getText());
 			    		    data.add(datum);
+					        if(t.getId() < lastID)
+				        	lastID = t.getId();    
 			    		    count++;
 						}
 					} 
-				} while (count< LIMIT && (query = r.nextQuery()) != null);
+					query.setMaxId(lastID-1);
+	        	}
+
 			}
 			
 			catch (TwitterException te) {

@@ -6,6 +6,7 @@
         <string name="yao_social_activity_login">socialFacebookActivity</string>
         <string name="yao_social_activity_google_activity">socialGoogleMapActivity</string>
         <string name="yao_social_activity_google_map">Google Map</string>
+        <string name="yao_social_activity_twitter_suggestion_button">Twitter Suggestion</string>
         <string name="yao_social_activity_twitter_suggestion">twitter suggestion</string>
         <string name="yao_social_activity_self_login">login</string>
         <string name="yao_social_activity_register">register</string>

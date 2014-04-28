@@ -37,5 +37,13 @@
         android:text="@string/yao_social_activity_google_map" 
         style="@style/RoundedCornerBtn"
         />
+
+    <Button
+        android:id="@+id/buttonTwitterSuggestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/yao_social_activity_twitter_suggestion_button" 
+        style="@style/RoundedCornerBtn"/>
+
     </LinearLayout>
 </LinearLayout>

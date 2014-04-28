@@ -58,5 +58,15 @@ public class shareActivity extends Activity{
 
 			}
 		});
+		Button buttonTwitterSuggestion = (Button) findViewById(R.id.buttonTwitterSuggestion);
+		buttonTwitterSuggestion.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				Intent temp = new Intent(shareActivity.this, twitterFriendActivity.class);
+				startActivity(temp);
+			}
+		});
 	}
 }

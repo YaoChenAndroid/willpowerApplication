@@ -1,5 +1,10 @@
 package com.example.willpower.controllers;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import com.example.willpower.controllers.R;
 import com.example.willpower.models.User;
 import com.example.willpower.models.friendLoc;
@@ -10,8 +15,11 @@ import com.parse.Parse;
 import com.parse.ParseObject;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.AssetManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,12 +30,14 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 	public static final int START_BRAIN_ACTIVITY_ACTION = 1;
 	public static final int START_TREE_ACTIVITY_ACTION = 2;
+	private final static String TAG = "MainActivity";
 	
 	private ImageButton ib1,ib2,ib3,ib4;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		initialDatasetFile();
 		setupUI();
 		//connect service, which only can be connenct once
         Parse.initialize(this, "k67gag0IGiefqnYZHySJmvEiwpEwpi6c1uk5ExUl", "nmRcR7jOVAamqxtL9TmuWA0uBzZoJcJGNYFYVZxz");
@@ -113,6 +123,7 @@ public class MainActivity extends Activity {
 				startActivity(temp);
 			}
 		});
+
 	}
 	
 	/**
@@ -121,5 +132,33 @@ public class MainActivity extends Activity {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		
+	}
+	private void initialDatasetFile(){
+		try{
+			AssetManager am = this.getAssets();
+		    InputStream in = null;
+		    OutputStream out = null;
+		      in = am.open("classifier.txt");
+
+		      String outpath= Environment.getExternalStorageDirectory().getAbsolutePath() ; 
+
+		        File outFile = new File(outpath, "/classifier.txt");
+
+
+		      out = new FileOutputStream(outFile);
+	        	byte[] buffer = new byte[1024];
+	        	int bytesRead;
+	        	while((bytesRead = in.read(buffer)) !=-1){
+	        	out.write(buffer, 0, bytesRead);
+	        	}
+		      in.close();
+		      in = null;
+		      out.flush();
+		      out.close();
+		}catch(Exception e)
+		{
+			Log.e(TAG, e.getMessage());
+		}
+
 	}
 }
