@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/tree_strategy_background"
     android:orientation="vertical" >
     
     <TableLayout
@@ -21,7 +20,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/tree_plant_new_tree_new_acres_label_lai"
-                android:textSize="25dp" />
+                android:textColor="#FFFFFF"
+                android:textSize="20dp" />
             
             <EditText
                 android:id="@+id/tree_plant_new_tree_new_acres_input_lai"
@@ -30,7 +30,8 @@
                 android:hint="@string/tree_plant_new_tree_new_acres_hint_lai"
                 android:inputType="number"
                 android:text="0"
-                android:textSize="25dp" />
+                android:textColor="#FFFFFF"
+                android:textSize="20dp" />
             
         </TableRow>
         
@@ -44,13 +45,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/tree_plant_new_tree_credits_label_lai"
-                android:textSize="25dp" />
+                android:textColor="#FFFFFF"
+                android:textSize="20dp" />
             
             <EditText
                 android:id="@+id/tree_plant_new_tree_credits_cost_lai"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="25dp" />
+                android:textSize="20dp" />
             
         </TableRow>
         
@@ -63,7 +65,7 @@
                 android:id="@+id/tree_plant_new_tree_credits_msgresult_lai"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="25dp" />
+                android:textSize="20dp" />
             
         </TableRow>
         

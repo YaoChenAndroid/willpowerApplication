@@ -318,7 +318,7 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 		final EditText creditsEditText = (EditText) plantNewTreeView.findViewById(R.id.tree_plant_new_tree_credits_cost_lai);
 		final TextView creditsMsg = (TextView) plantNewTreeView.findViewById(R.id.tree_plant_new_tree_credits_msgresult_lai);
 		creditsEditText.setKeyListener(null);
-		AlertDialog.Builder builder = new AlertDialog.Builder(TreeStrategyGameActivity.this);
+		AlertDialog.Builder builder = new AlertDialog.Builder(TreeStrategyGameActivity.this, android.R.style.Theme_Translucent_NoTitleBar);
 		builder.setTitle("Plant new trees");
 		builder.setView(plantNewTreeView);
 		builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
@@ -373,7 +373,7 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 							creditsMsg.setTextColor(Color.parseColor("#FF0000"));
 						} else {
 							creditsEditText.setText(String.valueOf(creditsCost));
-							creditsEditText.setTextColor(Color.parseColor("#000000"));
+							creditsEditText.setTextColor(Color.parseColor("#FFFFFF"));
 							creditsMsg.setText("");
 							treeDialog.getButton(Dialog.BUTTON_POSITIVE).setEnabled(true);
 						}
