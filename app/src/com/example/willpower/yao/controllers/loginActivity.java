@@ -53,6 +53,7 @@ public class loginActivity extends Activity{
 					        User user = userList.get(0);
 					        temp.userName = user.getName();
 					        temp.UserId = user.getObjectId();
+					        temp.UserGoal = user.getGoal();
 			            	finish();
 			            }
 			            else{

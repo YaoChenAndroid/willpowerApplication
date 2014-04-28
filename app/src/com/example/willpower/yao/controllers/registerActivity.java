@@ -27,6 +27,7 @@ public class registerActivity extends Activity{
 	private String emailStr;
 	private String userNameStr;
 	private String passwordStr;
+	private String goals;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -74,6 +75,7 @@ public class registerActivity extends Activity{
         user.setEmail(emailStr);
         user.setName(userNameStr);
         user.setPassword(passwordStr);
+        user.setGoal(goals);
         ParseACL acl = new ParseACL();
         acl.setPublicReadAccess(true);
         acl.setPublicWriteAccess(true);
@@ -86,6 +88,7 @@ public class registerActivity extends Activity{
 		        CurrentUserInfo temp = CurrentUserInfo.getInstance();
 		        temp.userName = userNameStr;
 		        temp.UserId = user.getObjectId();
+		        temp.UserGoal = goals;
 			}
         	
         });
@@ -98,6 +101,7 @@ public class registerActivity extends Activity{
     {
     	EditText emailAddress = (EditText)findViewById(R.id.editTextEmail);
 		EditText userName = (EditText)findViewById(R.id.editTextName);
+		EditText goal = (EditText)findViewById(R.id.editTextGOals);
 		EditText password = (EditText)findViewById(R.id.editTextPassword);
 		EditText passwordComfirm = (EditText)findViewById(R.id.editTextPasswordComfirm);
 		
@@ -121,6 +125,12 @@ public class registerActivity extends Activity{
         if(userNameStr.length() == 0)
         {
             this.setRequired(userName, this.getString(R.string.yao_login_i_empty) );
+            return false;
+        }
+        goals = goal.getText().toString().trim();
+        if(goals.length() == 0)
+        {
+            this.setRequired(goal, this.getString(R.string.yao_login_i_empty) );
             return false;
         }
         passwordStr= password.getText().toString().trim();

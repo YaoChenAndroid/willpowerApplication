@@ -31,6 +31,14 @@ public class User extends ParseObject{
 	{
 		put("Password", value);
 	}
+	public String getGoal()
+	{
+		return getString("Goal");
+	}
+	public void setGoal(String value)
+	{
+		put("Goal", value);
+	}
 	public static ParseQuery<User> getQuery()
 	{
 		return ParseQuery.getQuery(User.class);
