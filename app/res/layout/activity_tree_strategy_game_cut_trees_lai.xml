@@ -20,7 +20,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/tree_cut_down_trees_new_acres_label_lai"
-                android:textSize="25dp" />
+                android:textColor="#FFFFFF"
+                android:textSize="20dp" />
             
             <EditText
                 android:id="@+id/tree_cut_down_trees_new_acres_input_lai"
@@ -29,7 +30,8 @@
                 android:hint="@string/tree_cut_down_trees_new_acres_hint_lai"
                 android:inputType="number"
                 android:text="0"
-                android:textSize="25dp" />
+                android:textColor="#FFFFFF"
+                android:textSize="20dp" />
             
         </TableRow>
         
@@ -42,7 +44,7 @@
                 android:id="@+id/tree_cut_down_trees_msgresult_lai"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="25dp" />
+                android:textSize="20dp" />
             
         </TableRow>
         
