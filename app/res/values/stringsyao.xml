@@ -17,6 +17,8 @@
         <string name="yao_social_infor_map_friend_duplicatoin">You are already friends!</string>        
         <string name="yao_social_infor_map_add_friend">Click to me to add friends!</string>
         
+        <string name="yao_social_infor_twitter_suggestion_friend_message">The follow twitter user feel good in your goal. You will be benifit from them</string>
+        
         <string name="yao_login_email">Email Address:</string>
         <string name="yao_login_name">Name:</string>
         <string name="yao_login_goal">Goal:</string>
@@ -29,6 +31,7 @@
         <string name="yao_login_i_passwordConfirm">Two passwords should be same!</string>
         <string name="yao_login_i_email_registed">This email address has been registed!</string>
         <string name="yao_login_i_email_password_error">This email address and password is not match!</string>
+        <string name="yao_login_i_email_please">Please login first!</string>
         
         <color name="light_gray">#7cd12e</color>
 	    <color name="gray">#938192</color>

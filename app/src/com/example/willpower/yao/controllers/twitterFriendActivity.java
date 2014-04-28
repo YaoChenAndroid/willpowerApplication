@@ -37,9 +37,14 @@ import android.widget.TextView;
 public class twitterFriendActivity extends Activity{
 	private final static String TAG = "twitterFriendActivity";
 	private List<Map<String, String>> data;
+	private String UserGoal;
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_social_twitter_suggestion_yao);
+		CurrentUserInfo user = CurrentUserInfo.getInstance();
+		UserGoal = user.UserGoal;
+		TextView t = (TextView)findViewById(R.id.textViewUserGoal);
+		t.setText("Your Goal is " + UserGoal);
 		data = new ArrayList<Map<String, String>>();
 		//Modify UI to show current trip
 		ListView listV = (ListView)findViewById(R.id.listViewTwitterFriend);	
@@ -67,7 +72,8 @@ public class twitterFriendActivity extends Activity{
 			// TODO Auto-generated method stub
 			try {
 				twitterTest();
-				performQuery("lost weight");
+				
+				performQuery(UserGoal);
 				
 			}catch(TwitterException e){
 				Log.e(TAG, e.getMessage());

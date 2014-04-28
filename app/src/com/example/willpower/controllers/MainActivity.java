@@ -9,6 +9,7 @@ import com.example.willpower.controllers.R;
 import com.example.willpower.models.User;
 import com.example.willpower.models.friendLoc;
 import com.example.willpower.models.userFriend;
+import com.example.willpower.yao.controllers.CurrentUserInfo;
 import com.example.willpower.yao.controllers.loginActivity;
 import com.example.willpower.yao.controllers.shareActivity;
 import com.parse.Parse;
@@ -118,9 +119,15 @@ public class MainActivity extends Activity {
 			@Override
 			//Yao Override this method
 			public void onClick(View v) {
-				//Toast.makeText(MainActivity.this, "Button4 is clicked, please override this method to activate game4Activity", 2000).show();
-				Intent temp = new Intent(MainActivity.this,shareActivity.class);
-				startActivity(temp);
+		        CurrentUserInfo user = CurrentUserInfo.getInstance();
+		        if(user.UserId.length() == 0){
+					Toast.makeText(MainActivity.this, MainActivity.this.getResources().getString(R.string.yao_login_i_email_please), Toast.LENGTH_LONG).show();
+
+		        }else{
+					Intent temp = new Intent(MainActivity.this,shareActivity.class);
+					startActivity(temp);
+		        }
+
 			}
 		});
 

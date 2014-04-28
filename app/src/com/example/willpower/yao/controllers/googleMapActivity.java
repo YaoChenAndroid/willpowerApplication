@@ -48,7 +48,7 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 	OnInfoWindowClickListener,
 	GooglePlayServicesClient.OnConnectionFailedListener{
 	  private final static String TAG = "googleMapActivity";
-	  private String username = "YaoChen";
+	  private String username;
 	  private String curUserID;
 	  private String friendID;
 	  
@@ -88,6 +88,9 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_social_google_map_yao);
+		CurrentUserInfo temp = CurrentUserInfo.getInstance();
+		username = temp.userName;
+		curUserID = temp.UserId;
 		//initial service, the service used to get current location
 		locationRequest = LocationRequest.create();
 		locationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
@@ -233,7 +236,7 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 	{
         //save current location to parse
         ParseQuery<friendLoc> locQuery = friendLoc.getQuery();   
-        locQuery.whereEqualTo("name", username);
+        locQuery.whereEqualTo("UserID", curUserID);
         locQuery.findInBackground(new FindCallback<friendLoc>(){
 
 			@Override
@@ -264,6 +267,7 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 			        friendLoc loc = new friendLoc();
 			        loc.setLocation(myPoint);
 			        loc.setText(username);
+			        loc.setUserID(curUserID);
 			        ParseACL acl = new ParseACL();
 			        acl.setPublicReadAccess(true);
 			        acl.setPublicWriteAccess(true);

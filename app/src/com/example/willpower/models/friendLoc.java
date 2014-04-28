@@ -16,6 +16,14 @@ public class friendLoc extends ParseObject{
 	{
 		put("name", value);
 	}
+	public String getUserID()
+	{
+		return getString("UserID");
+	}
+	public void setUserID(String value)
+	{
+		put("UserID", value);
+	}
 	public ParseGeoPoint getLocation()
 	{
 		return getParseGeoPoint("location");
