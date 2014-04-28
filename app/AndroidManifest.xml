@@ -72,6 +72,10 @@
             android:name="com.example.willpower.yao.controllers.googleMapActivity"
             android:label="@string/yao_social_activity_google_activity" >
         </activity>
+        <activity
+            android:name="com.example.willpower.yao.controllers.twitterFriendActivity"
+            android:label="@string/yao_social_activity_twitter_suggestion" >
+        </activity>
         
         <activity
             android:name="com.example.willpower.yao.controllers.loginActivity"
@@ -81,6 +85,7 @@
             android:name="com.example.willpower.yao.controllers.registerActivity"
             android:label="@string/yao_social_activity_register" >
         </activity>
+
         
         <activity android:name="com.facebook.LoginActivity"
                   android:theme="@android:style/Theme.Translucent.NoTitleBar"
