@@ -158,6 +158,9 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 				});
 				AlertDialog alertDialog = builder.create();
 				alertDialog.show();
+			} else {
+				Intent intent = new Intent(TreeStrategyGameActivity.this, TreeStrategyMainActivity.class);
+				startActivity(intent);
 			}
 		} else if (viewId == R.id.save_current_game_lai) {
 			toastAnnounce("save current game");

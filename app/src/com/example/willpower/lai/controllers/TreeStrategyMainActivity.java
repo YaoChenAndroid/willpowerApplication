@@ -29,6 +29,7 @@ public class TreeStrategyMainActivity extends Activity {
 	private ImageButton mTreeStrategyContinue;
 	private ImageButton mTreeStrategyViewScore;
 	private ImageButton mTreeStrategyBackToMain;
+	private ImageButton mTreeStrategyInstruction;
 	
 	private TreeStrategyGameDatabaseHelper db = new TreeStrategyGameDatabaseHelper(TreeStrategyMainActivity.this);
 	
@@ -37,6 +38,7 @@ public class TreeStrategyMainActivity extends Activity {
 	public static final int START_TREE_STRATEGY_NEW_GAME = 21;
 	public static final int START_TREE_STRATEGY_CONTINUE = 22;
 	public static final int START_TREE_STRATEGY_VIEW_SCORE = 23;
+	public static final int START_TREE_STRATEGY_INSTRUCTION = 24;
 	
 	@SuppressLint("NewApi")
 	@Override
@@ -53,6 +55,7 @@ public class TreeStrategyMainActivity extends Activity {
 		mTreeStrategyContinue = (ImageButton)findViewById(R.id.tree_strategy_continue);
 		mTreeStrategyViewScore = (ImageButton)findViewById(R.id.tree_strategy_view_score);
 		mTreeStrategyBackToMain = (ImageButton)findViewById(R.id.tree_strategy_back_to_main);
+		mTreeStrategyInstruction = (ImageButton)findViewById(R.id.tree_strategy_go_to_instruction);
 		
 		ArrayList<TreeGameObject> log = db.getAllTreeGameObject();
 		Log.d("TreeStrategy", "(Variable Value)check whether have saved game: " + log.size());
@@ -111,6 +114,7 @@ public class TreeStrategyMainActivity extends Activity {
 			}
 			
 		});
+		
 		mTreeStrategyViewScore.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -121,6 +125,7 @@ public class TreeStrategyMainActivity extends Activity {
 			}
 			
 		});
+		
 		mTreeStrategyBackToMain.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -130,6 +135,16 @@ public class TreeStrategyMainActivity extends Activity {
 				startActivity(backToMain);
 			}
 			
+		});
+		
+		mTreeStrategyInstruction.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Log.d("TreeStrategy", "(LoadModule)Go to instruction model.");
+				Intent gotoInstruction = new Intent(TreeStrategyMainActivity.this, GameInstructionActivity.class);
+				startActivityForResult(gotoInstruction, START_TREE_STRATEGY_INSTRUCTION);
+			}
 		});
 	}
 
