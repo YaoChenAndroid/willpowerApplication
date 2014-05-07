@@ -155,6 +155,7 @@ public class GameInstructionActivity extends Activity {
 		@Override
 		public void run() {
 			mTreeStrategyInstructionMsgBox.setText("Congrats! You spend your money to plant some new trees.");
+			mTreeStrategyInstructionMsgButton.setBackground(null);
 			handler.postDelayed(newStepV_II, 5000);
 		}
 		
