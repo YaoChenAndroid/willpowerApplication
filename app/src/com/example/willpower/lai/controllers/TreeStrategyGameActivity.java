@@ -479,7 +479,8 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 	 * save current game
 	 */
 	public void saveCurrentGame() {
-		helper.saveTreeGame(createGameObject());
+		long curr_score = mCurrentAcres * mCurrentValuePerAcre + mCurrentCredits;
+		helper.saveTreeGame(createGameObject(), curr_score);
 	}
 	
 	/**
