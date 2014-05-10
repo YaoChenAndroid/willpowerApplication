@@ -27,10 +27,6 @@ public class SentimentClassifier {
 	public SentimentClassifier() {
 	
 	try {
-//		File homedir = new File(System.getProperty("user.home"));
-//		File fileToRead = new File(homedir, "/sunny/Downloads/classifier.txt");
-//		temp= (LMClassifier) AbstractExternalizable.read(is);
-
 		temp= (LMClassifier) AbstractExternalizable.readObject(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/classifier.txt"));
 		categories = temp.categories();
 	}
