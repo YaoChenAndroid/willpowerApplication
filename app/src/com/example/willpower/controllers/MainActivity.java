@@ -44,24 +44,8 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		initialDatasetFile();
 		setupUI();
-		//connect service, which only can be connenct once
+	    ParseAnalytics.trackAppOpened(getIntent());
 
-	    //PushService.setDefaultPushCallback(this, MainActivity.class);
-	    //ParseAnalytics.trackAppOpened(getIntent());
-
-	    final Context context = this;
-	    new AsyncTask<Void, Void, Void>() {
-	        @Override
-	        protected Void doInBackground(Void... params) {
-	            Parse.initialize(MainActivity.this, "k67gag0IGiefqnYZHySJmvEiwpEwpi6c1uk5ExUl", "nmRcR7jOVAamqxtL9TmuWA0uBzZoJcJGNYFYVZxz");
-	    	    ParseObject.registerSubclass(friendLoc.class);
-	    	    ParseObject.registerSubclass(userFriend.class);
-	    	    ParseObject.registerSubclass(User.class);
-	            PushService.setDefaultPushCallback(context, MainActivity.class);
-	            ParseAnalytics.trackAppOpened(getIntent());
-	            return null;
-	        }
-	    }.execute();
 	}
 
 	@Override
