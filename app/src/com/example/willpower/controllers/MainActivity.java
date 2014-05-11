@@ -17,9 +17,11 @@ import com.parse.ParseAnalytics;
 import com.parse.ParseObject;
 import com.parse.PushService;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.util.Log;
@@ -43,12 +45,23 @@ public class MainActivity extends Activity {
 		initialDatasetFile();
 		setupUI();
 		//connect service, which only can be connenct once
-        Parse.initialize(this, "k67gag0IGiefqnYZHySJmvEiwpEwpi6c1uk5ExUl", "nmRcR7jOVAamqxtL9TmuWA0uBzZoJcJGNYFYVZxz");
-	    ParseObject.registerSubclass(friendLoc.class);
-	    ParseObject.registerSubclass(userFriend.class);
-	    ParseObject.registerSubclass(User.class);
-	    PushService.setDefaultPushCallback(this, MainActivity.class);
-	    ParseAnalytics.trackAppOpened(getIntent());
+
+	    //PushService.setDefaultPushCallback(this, MainActivity.class);
+	    //ParseAnalytics.trackAppOpened(getIntent());
+
+	    final Context context = this;
+	    new AsyncTask<Void, Void, Void>() {
+	        @Override
+	        protected Void doInBackground(Void... params) {
+	            Parse.initialize(MainActivity.this, "k67gag0IGiefqnYZHySJmvEiwpEwpi6c1uk5ExUl", "nmRcR7jOVAamqxtL9TmuWA0uBzZoJcJGNYFYVZxz");
+	    	    ParseObject.registerSubclass(friendLoc.class);
+	    	    ParseObject.registerSubclass(userFriend.class);
+	    	    ParseObject.registerSubclass(User.class);
+	            PushService.setDefaultPushCallback(context, MainActivity.class);
+	            ParseAnalytics.trackAppOpened(getIntent());
+	            return null;
+	        }
+	    }.execute();
 	}
 
 	@Override
