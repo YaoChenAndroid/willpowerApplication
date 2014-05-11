@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ColorBrainActivity extends Activity {
-	TextView cbtv1,cbtv2,cbtv3,cbtv4,cbtv5,cbtv6;
+	TextView cbtv1,cbtv2,cbtv3,cbtv4,cbtv5,cbtv6,cbtv7,cbtv8;
 	TextView cbtimer;
 	ProgressBar progressBar;
 	long timelimit=30*1000;
@@ -50,6 +50,7 @@ public class ColorBrainActivity extends Activity {
 		}
 		cbtv4.setText(right+"");
 		cbtv6.setText(wrong+"");
+		cbtv8.setText(highestScore+"");
 		progressBar.setMax(100);
 	}
 
@@ -62,6 +63,8 @@ public class ColorBrainActivity extends Activity {
 		cbtv4=(TextView) findViewById(R.id.cbtv4);
 		cbtv5=(TextView) findViewById(R.id.cbtv5);
 		cbtv6=(TextView) findViewById(R.id.cbtv6);
+		cbtv7=(TextView) findViewById(R.id.cbtv7);
+		cbtv8=(TextView) findViewById(R.id.cbtv8);
 		
 		cbbtn1=(Button) findViewById(R.id.cbbtn1);
 		cbbtn2=(Button) findViewById(R.id.cbbtn2);
@@ -120,10 +123,11 @@ public class ColorBrainActivity extends Activity {
 	    	  AlertDialog.Builder builder = new AlertDialog.Builder(ColorBrainActivity.this);
 
 	    	  // 2. Chain together various setter methods to set the dialog characteristics
-	    	  if(right>highestScore){
+	    	  if(right-wrong>highestScore){
 		    	  builder.setMessage("Congratulations!You have made a new record of "+right+" points!");
+		    	  highestScore=right;
 	    	  }else{
-		    	  builder.setMessage("You score "+right+" points, keep practicing!");
+		    	  builder.setMessage("You score "+(right-wrong)+" points, keep practicing!");
 	    	  }
 
 	    	// Add the buttons
