@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 public class ColorBrainActivity extends Activity {
 	TextView cbtv1,cbtv2,cbtv3,cbtv4,cbtv5,cbtv6;
+	TextView cbtimer;
 	ProgressBar progressBar;
 	long timelimit=30*1000;
 	Button cbbtn1,cbbtn2,cbbtn3;
@@ -27,6 +28,7 @@ public class ColorBrainActivity extends Activity {
 	int wrong=0;
 	int highestScore=0;
 	MyCount timerCount;
+	long millisUntilFinished=timelimit;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,8 +36,8 @@ public class ColorBrainActivity extends Activity {
 		currentQuestion=Question.newQuestion();
 		setupUI();
 		refreshUI();
-	    timerCount = new MyCount(timelimit, 1000);
-	    timerCount.start();
+	    //timerCount = new MyCount(timelimit, 1000);
+	    //timerCount.start();
 	}
 
 	
@@ -53,6 +55,7 @@ public class ColorBrainActivity extends Activity {
 
 	private void setupUI() {
 		progressBar=(ProgressBar) findViewById(R.id.progressBar1);
+		cbtimer=(TextView) findViewById(R.id.cbtimer);
 		cbtv1=(TextView) findViewById(R.id.cbtv1);
 		cbtv2=(TextView) findViewById(R.id.cbtv2);
 		cbtv3=(TextView) findViewById(R.id.cbtv3);
@@ -87,7 +90,22 @@ public class ColorBrainActivity extends Activity {
 		cbbtn3.setOnClickListener(onClickListener1);
 	}
 	
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		timerCount.cancel();
+		
+	}
 	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		refreshUI();
+ 	    timerCount = new MyCount(millisUntilFinished, 1000);
+	    timerCount.start();	   
+	}
 	  public class MyCount extends CountDownTimer {
 	      public MyCount(long millisInFuture, long countDownInterval) {
 	        super(millisInFuture, countDownInterval);
@@ -95,6 +113,9 @@ public class ColorBrainActivity extends Activity {
 
 	      @Override
 	      public void onFinish() {
+	    	  
+		    	cbtimer.setText("0");
+
 	    	// 1. Instantiate an AlertDialog.Builder with its constructor
 	    	  AlertDialog.Builder builder = new AlertDialog.Builder(ColorBrainActivity.this);
 
@@ -129,8 +150,10 @@ public class ColorBrainActivity extends Activity {
 
 	      @Override
 	      public void onTick(long millisUntilFinished) {
+	    	  ColorBrainActivity.this.millisUntilFinished=millisUntilFinished;
 	    	progressBar.setProgress(100-(int)(millisUntilFinished*100/timelimit));//((int)millisUntilFinished/30000);
-		    Toast.makeText(ColorBrainActivity.this, (millisUntilFinished/1000)+"", Toast.LENGTH_SHORT).show();
+		    //Toast.makeText(ColorBrainActivity.this, (millisUntilFinished/1000)+"", Toast.LENGTH_SHORT).show();
+	    	cbtimer.setText((millisUntilFinished/1000)+"");
 	      }   
 	    } 
 }
