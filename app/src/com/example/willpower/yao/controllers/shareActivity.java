@@ -2,6 +2,7 @@ package com.example.willpower.yao.controllers;
 
 
 import android.app.Activity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,12 +12,15 @@ import android.widget.Button;
 import com.example.willpower.controllers.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+//the main activity of social modular
 public class shareActivity extends Activity{
+	private final static String TAG = "shareActivity";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_social_share_yao);
 		// TODO - fill in here	
+		//share the message to user' facebook
 		Button buttonShare = (Button) findViewById(R.id.buttonShare);
 		buttonShare.setOnClickListener(new View.OnClickListener() {
 			
@@ -35,7 +39,7 @@ public class shareActivity extends Activity{
 
 			}
 		});
-
+		//show the user in google map
 		Button buttonGoogleMap = (Button) findViewById(R.id.buttonGoogleMap);
 		buttonGoogleMap.setOnClickListener(new View.OnClickListener() {
 			
@@ -58,6 +62,7 @@ public class shareActivity extends Activity{
 
 			}
 		});
+		//show related twitter message
 		Button buttonTwitterSuggestion = (Button) findViewById(R.id.buttonTwitterSuggestion);
 		buttonTwitterSuggestion.setOnClickListener(new View.OnClickListener() {
 			

@@ -25,7 +25,8 @@ import com.facebook.widget.FacebookDialog.PendingCall;
 import com.facebook.widget.LoginButton;  
 
 public class MainFragment extends Fragment {  
-    private UiLifecycleHelper uiHelper;  
+	private final static String TAG = "MainFragment";
+	private UiLifecycleHelper uiHelper;  
     
     private Button sendRequestButton;
     private boolean overflag = false;
@@ -71,7 +72,7 @@ public class MainFragment extends Fragment {
         });
         return view;  
     }  
-    
+    //if the users' facebook state changed
 	private void onSessionStateChange(Session session, SessionState state, Exception exception) {
 	    if (state.isOpened()) {
 	        sendRequestButton.setVisibility(View.VISIBLE);
@@ -79,7 +80,7 @@ public class MainFragment extends Fragment {
 	        sendRequestButton.setVisibility(View.INVISIBLE);
 	    }
 	}
-	
+	//share the message to user' facebook
 	private void sendRequestDialog() {
 
 		if(FacebookDialog.canPresentShareDialog(this.getActivity(), FacebookDialog.ShareDialogFeature.SHARE_DIALOG))

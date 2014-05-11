@@ -81,7 +81,7 @@ public class loginActivity extends Activity{
 			
 		});
 	}
-
+	//check the textbox validation
     private boolean valid() throws ParseException
     {
 		EditText emailAddress = (EditText)findViewById(R.id.editTextLoginEmail);
@@ -103,6 +103,7 @@ public class loginActivity extends Activity{
         }
         return true;
     }
+    //show the animation of error message
     protected void setRequired(View view,String... error){
         view.startAnimation(shakeAction);
         view.setFocusable(true);
@@ -112,12 +113,14 @@ public class loginActivity extends Activity{
             ((EditText) view).setError(error[0]);
         }
     }
+    //start register activity
 	private void startReg()
 	{
 		Intent intent = new Intent(this, registerActivity.class);
 		startActivityForResult(intent, 100);
 	}
 	@Override
+	//after register, finish current activity
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent){
 		if(requestCode == 100)
 		{

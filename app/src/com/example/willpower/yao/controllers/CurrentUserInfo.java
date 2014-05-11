@@ -2,6 +2,8 @@ package com.example.willpower.yao.controllers;
 //used in user system to record current user information
 // there are only one current user at one time
 public class CurrentUserInfo {
+
+	private final static String TAG = "CurrentUserInfo";
 	private static CurrentUserInfo currentUser = null;
 	public String userName = "";
 	public String UserId = "";

@@ -68,7 +68,7 @@ public class registerActivity extends Activity{
 		Intent intent = new Intent();
 		setResult(this.RESULT_CANCELED,intent);
 	}
-	
+	//save register information to the web server
 	private void saveUser() {
 		// TODO Auto-generated method stub
         final User user = new User();
@@ -96,7 +96,7 @@ public class registerActivity extends Activity{
         setResult(this.RESULT_OK, intent);
         
 	}
-
+	//check whether the textbox is empty and the input validation
     private boolean valid() throws ParseException
     {
     	EditText emailAddress = (EditText)findViewById(R.id.editTextEmail);
@@ -152,6 +152,7 @@ public class registerActivity extends Activity{
         }
         return true;
     }
+    //show the anamition of error information
     protected void setRequired(View view,String... error){
         view.startAnimation(shakeAction);
         view.setFocusable(true);

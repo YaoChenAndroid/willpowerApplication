@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 
 public class loginFragmentActivity extends FragmentActivity {
+	private final static String TAG = "loginFragmentActivity";
     private MainFragment mainFragment;  
     
 

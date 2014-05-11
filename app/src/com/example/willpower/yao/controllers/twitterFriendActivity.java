@@ -56,6 +56,7 @@ public class twitterFriendActivity extends Activity{
 		listV.setAdapter(adapter);
 		new asytask(this).execute();		
 	}
+	//download twitter message and analysis the message, update UI
 	public class asytask extends AsyncTask<Void, Void, Integer>{
 		private final static String TAG = "asytask";
 		SentimentClassifier sentClassifier;
@@ -128,6 +129,7 @@ public class twitterFriendActivity extends Activity{
 			}
 
 		}
+		//update UI after analysis the twitter message
     	protected void onPostExecute (Integer i)
     	{
 			try {
@@ -140,6 +142,7 @@ public class twitterFriendActivity extends Activity{
 			}
 
     	}
+    	//download twitter message from web server
 		public void performQuery(String inQuery) throws InterruptedException, IOException {
 			Query query = new Query(inQuery);
 			query.setCount(20);

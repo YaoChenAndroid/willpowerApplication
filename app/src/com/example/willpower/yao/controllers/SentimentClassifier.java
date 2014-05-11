@@ -23,7 +23,7 @@ public class SentimentClassifier {
 	private final static String TAG = "SentimentClassifier";
 	String[] categories;
 	LMClassifier temp;
-
+	//initial classifier
 	public SentimentClassifier() {
 	
 	try {
@@ -38,11 +38,12 @@ public class SentimentClassifier {
 	}
 
 	}
-
+	//classify the twitter message
 	public String classify(String text) {
 	ConditionalClassification classification = temp.classify(text);
 	return classification.bestCategory();
 	}
+	//tain the sentiment classifier
 	void train() throws IOException, ClassNotFoundException {
 		File trainDir;
 		String[] categories;

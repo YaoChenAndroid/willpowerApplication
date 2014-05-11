@@ -146,6 +146,7 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 	        
 	}
 	@Override
+	//refresh the map
 	protected void onResume()
 	{
 		super.onResume();
@@ -157,6 +158,7 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 	{
 		return new ParseGeoPoint(loc.getLatitude(), loc.getLongitude());
 	}
+	//clean all users from map
 	private void cleanUpMarkers(Set<String> toKeep) {
 		// TODO Auto-generated method stub
 		Set<String> temp = mapMarkers.keySet();
@@ -231,7 +233,7 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 		);
 		
 	}
-
+	//save current users' location
 	private void saveUserLocation() 
 	{
         //save current location to parse
@@ -309,6 +311,7 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 		}
 	}
 	@Override
+	//save users' location
 	public void onConnected(Bundle arg0) {
 		// TODO Auto-generated method stub
 		currentLocation = getLocation();
@@ -321,6 +324,7 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 	        Log.d("Disconnected from location services", getResources().getString(R.string.app_name));
 	}
 	@Override
+	//refresh the map when location changed
 	public void onLocationChanged(Location location)
 	{
 		currentLocation = location;
@@ -330,6 +334,7 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 		doMapQuery();
 	}
 	@Override
+	//save the users' location and stop the location update
 	public void onStop()
 	{
 		saveUserLocation();
@@ -340,20 +345,24 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 		super.onStop();
 	}
 	@Override
+	//connect google map service
 	public void onStart()
 	{
 		super.onStart();
 		locationClient.connect();
 
 	}
+	//start service update periodically
 	private void startPeriodicUpdata()
 	{
 		locationClient.requestLocationUpdates(locationRequest, this);
 	}
+	//stop service update
 	private void stopPeriodicUpdates()
 	{
 		locationClient.removeLocationUpdates(this);
 	}
+	//get current location
 	private Location getLocation()
 	{
 		if(servicesConnected())
@@ -365,6 +374,7 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 			return null;
 		}
 	}
+	//connect to google map service
 	private boolean servicesConnected() {
 		// TODO Auto-generated method stub
 		int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
@@ -380,6 +390,7 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 		}
 		return false;
 	}
+	//error message
 	  private void showErrorDialog(int errorCode) {
 		    // Get the error dialog from Google Play services
 		    Dialog errorDialog =
@@ -399,6 +410,7 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 		      errorFragment.show(getSupportFragmentManager(), getResources().getString(R.string.app_name));
 		    }
 		  }
+	//error message dialog
 	public static class ErrorDialogFragment extends DialogFragment{
 		private Dialog mDialog;
 		public ErrorDialogFragment(){
@@ -414,6 +426,7 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 		}
 	}
 	@Override
+	//add friends 
 	public void onInfoWindowClick(Marker arg0) {
 		// TODO Auto-generated method stub
 		String key = null;
@@ -457,10 +470,12 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 		}
 
 	}	
+	//show the message if the user want to add same person as friends twice
 	private void duplicatedFriendsToast()
 	{
 		Toast.makeText(this, getResources().getString(R.string.yao_social_infor_map_friend_duplicatoin),Toast.LENGTH_LONG).show();
 	}
+	//update friends information to the server
 	private void saveFriend() {
 		// TODO Auto-generated method stub
 		//add a new friend
