@@ -2,6 +2,7 @@ package com.example.willpower.yuxin.controllers;
 
 import com.example.willpower.controllers.R;
 import com.example.willpower.yuxin.models.Question;
+import com.parse.ParseUser;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -29,7 +30,7 @@ public class ColorBrainActivity extends Activity {
 	Question currentQuestion;
 	int right=0;
 	int wrong=0;
-	int highestScore=0;
+	int highestScore;
 	MyCount timerCount;
 	long millisUntilFinished=timelimit;
 	@Override
@@ -37,8 +38,10 @@ public class ColorBrainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_colorbrain_yuxin);
 		currentQuestion=Question.newQuestion();
-	    SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-	    highestScore=settings.getInt("highestScore", 0);
+	    //SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+	    //highestScore=settings.getInt("highestScore", 0);
+		
+		resetHighestScore();
 		setupUI();
 		refreshUI();
 	    //timerCount = new MyCount(timelimit, 1000);
@@ -131,8 +134,8 @@ public class ColorBrainActivity extends Activity {
 	    	  // 2. Chain together various setter methods to set the dialog characteristics
 	    	  if(right-wrong>highestScore){
 		    	  builder.setMessage("Congratulations!You have made a new record of "+(right-wrong)+" points!");
-		    	  highestScore=right-wrong;
-		    	  getSharedPreferences(PREFS_NAME, 0).edit().putInt("highestScore", highestScore).commit();
+		    	  //getSharedPreferences(PREFS_NAME, 0).edit().putInt("highestScore", highestScore).commit();
+		    	  updateHighestScore(right-wrong);
 	    	  }else{
 		    	  builder.setMessage("You score "+(right-wrong)+" points, keep practicing!");
 	    	  }
@@ -167,4 +170,24 @@ public class ColorBrainActivity extends Activity {
 	    	cbtimer.setText((millisUntilFinished/1000)+"");
 	      }   
 	    } 
+	  
+	  
+	  private void resetHighestScore(){
+		  ParseUser currentUser = ParseUser.getCurrentUser();
+		  if (currentUser == null) {
+			  SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+			    highestScore=settings.getInt("highestScore", 0);
+		  } else {
+			  highestScore=currentUser.getInt("CBHighestScore");
+		  }
+	  }
+	  
+	  private void updateHighestScore(int score){
+		  ParseUser currentUser = ParseUser.getCurrentUser();
+		  if (currentUser == null) {
+			  getSharedPreferences(PREFS_NAME, 0).edit().putInt("highestScore", score).commit();
+		  } else {
+			  currentUser.put("highestScore", score);
+		  }		  
+	  }
 }
