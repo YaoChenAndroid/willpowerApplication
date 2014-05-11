@@ -13,7 +13,9 @@ import com.example.willpower.yao.controllers.CurrentUserInfo;
 import com.example.willpower.yao.controllers.loginActivity;
 import com.example.willpower.yao.controllers.shareActivity;
 import com.parse.Parse;
+import com.parse.ParseAnalytics;
 import com.parse.ParseObject;
+import com.parse.PushService;
 
 import android.os.Bundle;
 import android.os.Environment;
@@ -45,6 +47,8 @@ public class MainActivity extends Activity {
 	    ParseObject.registerSubclass(friendLoc.class);
 	    ParseObject.registerSubclass(userFriend.class);
 	    ParseObject.registerSubclass(User.class);
+	    PushService.setDefaultPushCallback(this, MainActivity.class);
+	    ParseAnalytics.trackAppOpened(getIntent());
 	}
 
 	@Override
