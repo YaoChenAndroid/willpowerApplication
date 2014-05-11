@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -17,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ColorBrainActivity extends Activity {
+    public static final String PREFS_NAME = "ColorBrainActivity";
+
 	TextView cbtv1,cbtv2,cbtv3,cbtv4,cbtv5,cbtv6,cbtv7,cbtv8;
 	TextView cbtimer;
 	ProgressBar progressBar;
@@ -34,10 +37,13 @@ public class ColorBrainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_colorbrain_yuxin);
 		currentQuestion=Question.newQuestion();
+	    SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+	    highestScore=settings.getInt("highestScore", 0);
 		setupUI();
 		refreshUI();
 	    //timerCount = new MyCount(timelimit, 1000);
 	    //timerCount.start();
+
 	}
 
 	
@@ -124,8 +130,9 @@ public class ColorBrainActivity extends Activity {
 
 	    	  // 2. Chain together various setter methods to set the dialog characteristics
 	    	  if(right-wrong>highestScore){
-		    	  builder.setMessage("Congratulations!You have made a new record of "+right+" points!");
-		    	  highestScore=right;
+		    	  builder.setMessage("Congratulations!You have made a new record of "+(right-wrong)+" points!");
+		    	  highestScore=right-wrong;
+		    	  getSharedPreferences(PREFS_NAME, 0).edit().putInt("highestScore", highestScore).commit();
 	    	  }else{
 		    	  builder.setMessage("You score "+(right-wrong)+" points, keep practicing!");
 	    	  }
