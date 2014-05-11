@@ -113,6 +113,8 @@ public class TreeStrategyGameDatabaseHelper extends SQLiteOpenHelper{
 				db.delete(TABLE_TREESTRATEGY_HIGHESTSCORE, null, null);
 				insertHighestScore(score);
 			}
+		} else {
+			insertHighestScore(score);
 		}
 		
 		Log.d("TreeStrategy", "(Action)Inert new tree score.");
