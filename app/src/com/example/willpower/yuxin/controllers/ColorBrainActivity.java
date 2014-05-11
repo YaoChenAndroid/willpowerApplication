@@ -4,19 +4,29 @@ import com.example.willpower.controllers.R;
 import com.example.willpower.yuxin.models.Question;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ColorBrainActivity extends Activity {
 	TextView cbtv1,cbtv2,cbtv3,cbtv4,cbtv5,cbtv6;
+	ProgressBar progressBar;
+	long timelimit=30*1000;
 	Button cbbtn1,cbbtn2,cbbtn3;
 	Button[] cbbtns;
 	Question currentQuestion;
 	int right=0;
 	int wrong=0;
+	int highestScore=0;
+	MyCount timerCount;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -24,6 +34,8 @@ public class ColorBrainActivity extends Activity {
 		currentQuestion=Question.newQuestion();
 		setupUI();
 		refreshUI();
+	    timerCount = new MyCount(timelimit, 1000);
+	    timerCount.start();
 	}
 
 	
@@ -36,9 +48,11 @@ public class ColorBrainActivity extends Activity {
 		}
 		cbtv4.setText(right+"");
 		cbtv6.setText(wrong+"");
+		progressBar.setMax(100);
 	}
 
 	private void setupUI() {
+		progressBar=(ProgressBar) findViewById(R.id.progressBar1);
 		cbtv1=(TextView) findViewById(R.id.cbtv1);
 		cbtv2=(TextView) findViewById(R.id.cbtv2);
 		cbtv3=(TextView) findViewById(R.id.cbtv3);
@@ -72,4 +86,51 @@ public class ColorBrainActivity extends Activity {
 		cbbtn2.setOnClickListener(onClickListener1);
 		cbbtn3.setOnClickListener(onClickListener1);
 	}
+	
+	
+	  public class MyCount extends CountDownTimer {
+	      public MyCount(long millisInFuture, long countDownInterval) {
+	        super(millisInFuture, countDownInterval);
+	      }
+
+	      @Override
+	      public void onFinish() {
+	    	// 1. Instantiate an AlertDialog.Builder with its constructor
+	    	  AlertDialog.Builder builder = new AlertDialog.Builder(ColorBrainActivity.this);
+
+	    	  // 2. Chain together various setter methods to set the dialog characteristics
+	    	  if(right>highestScore){
+		    	  builder.setMessage("Congratulations!You have made a new record of "+right+" points!");
+	    	  }else{
+		    	  builder.setMessage("You score "+right+" points, keep practicing!");
+	    	  }
+
+	    	// Add the buttons
+	    	  builder.setPositiveButton("exit", new DialogInterface.OnClickListener() {
+	    	             public void onClick(DialogInterface dialog, int id) {
+	    	            	 ColorBrainActivity.this.finish();
+	    	             }
+	    	         });
+	    	  builder.setNegativeButton("restart", new DialogInterface.OnClickListener() {
+	    	             public void onClick(DialogInterface dialog, int id) {
+	    	            	right=0;
+	    	            	wrong=0;
+	    	        		refreshUI();
+	    	         	    timerCount = new MyCount(timelimit, 1000);
+	    	        	    timerCount.start();	    	            	 
+	    	             }
+	    	         });
+	    	  // 3. Get the AlertDialog from create()
+	    	  builder.setCancelable(false);     
+	    	  AlertDialog dialog = builder.create();
+	    	  dialog.setCanceledOnTouchOutside(false);
+	    	  dialog.show();
+	      }
+
+	      @Override
+	      public void onTick(long millisUntilFinished) {
+	    	progressBar.setProgress(100-(int)(millisUntilFinished*100/timelimit));//((int)millisUntilFinished/30000);
+		    Toast.makeText(ColorBrainActivity.this, (millisUntilFinished/1000)+"", Toast.LENGTH_SHORT).show();
+	      }   
+	    } 
 }
