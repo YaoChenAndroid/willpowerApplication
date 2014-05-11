@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.json.JSONException;
+
 import com.example.willpower.controllers.R;
 import com.example.willpower.lai.SQLiteOpenHelper.TreeStrategyGameDatabaseHelper;
 import com.example.willpower.lai.models.TreeGameObject;
+import com.example.willpower.lai.modules.TreeStrategyGameDataModule;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -20,6 +23,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -35,7 +39,8 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 	public static final int START_TREE_STRATEGY_NEW_GAME = 21;
 	public static final int START_TREE_STRATEGY_CONTINUE = 22;
 //	private TreeGameObject mGameObject; // Current game object
-	private TreeStrategyGameDatabaseHelper helper = new TreeStrategyGameDatabaseHelper(this);
+//	private TreeStrategyGameDatabaseHelper helper = new TreeStrategyGameDatabaseHelper(this);
+	private TreeStrategyGameDataModule module = new TreeStrategyGameDataModule(this);
 	
 	private double mCurrentIncreaseRate = 0.1; // Current increase rate
 	private long mCurrentAcres = 100; // Start tree acres
@@ -100,13 +105,25 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 	/**
 	 * decide whether it is a new game, if not, then load last log
 	 */
+//	public void checkIsNewGame() {
+//		ArrayList<TreeGameObject> curr = helper.getAllTreeGameObject();
+//		if (curr.size() != 0) {
+//			TreeGameObject loadSavedGameObject = curr.get(0);
+//			this.mCurrentAcres = loadSavedGameObject.getCurrentAcres();
+//			this.mCurrentCredits = loadSavedGameObject.getCurrentCredits();
+//			helper.clearTreeTables();
+//		}
+//	}
 	public void checkIsNewGame() {
-		ArrayList<TreeGameObject> curr = helper.getAllTreeGameObject();
-		if (curr.size() != 0) {
-			TreeGameObject loadSavedGameObject = curr.get(0);
-			this.mCurrentAcres = loadSavedGameObject.getCurrentAcres();
-			this.mCurrentCredits = loadSavedGameObject.getCurrentCredits();
-			helper.clearTreeTables();
+		try {
+			TreeGameObject tgo = module.loadCurrentGame();
+			if (tgo != null) {
+				this.mCurrentAcres = tgo.getCurrentAcres();
+				this.mCurrentCredits = tgo.getCurrentCredits();
+			}
+			module.clearRecords();
+		} catch (JSONException e) {
+			Log.d("TreeStrategy", e.getMessage());
 		}
 	}
 	
@@ -136,31 +153,60 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 			plantNewTreeDialog();
 		} else if (viewId == R.id.back_to_main_lai) {
 			toastAnnounce("back to main");
-			ArrayList<TreeGameObject> curr = helper.getAllTreeGameObject();
-			if (curr.size() == 0) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(TreeStrategyGameActivity.this, android.R.style.Theme_Translucent_NoTitleBar);
-				builder.setMessage("Are you sure you want to exit the game without saving it?");
-				builder.setCancelable(false);
-				builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						Intent intent = new Intent(TreeStrategyGameActivity.this, TreeStrategyMainActivity.class);
-						startActivity(intent);
-					}
-				});
-				builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.cancel();
-					}
-				});
-				AlertDialog alertDialog = builder.create();
-				alertDialog.show();
-			} else {
-				Intent intent = new Intent(TreeStrategyGameActivity.this, TreeStrategyMainActivity.class);
-				startActivity(intent);
+//			ArrayList<TreeGameObject> curr = helper.getAllTreeGameObject();
+//			if (curr.size() == 0) {
+//				AlertDialog.Builder builder = new AlertDialog.Builder(TreeStrategyGameActivity.this, android.R.style.Theme_Translucent_NoTitleBar);
+//				builder.setMessage("Are you sure you want to exit the game without saving it?");
+//				builder.setCancelable(false);
+//				builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//					
+//					@Override
+//					public void onClick(DialogInterface dialog, int which) {
+//						Intent intent = new Intent(TreeStrategyGameActivity.this, TreeStrategyMainActivity.class);
+//						startActivity(intent);
+//					}
+//				});
+//				builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+//					
+//					@Override
+//					public void onClick(DialogInterface dialog, int which) {
+//						dialog.cancel();
+//					}
+//				});
+//				AlertDialog alertDialog = builder.create();
+//				alertDialog.show();
+//			} else {
+//				Intent intent = new Intent(TreeStrategyGameActivity.this, TreeStrategyMainActivity.class);
+//				startActivity(intent);
+//			}
+			try {
+				if (!module.canLoadGame()) {
+					AlertDialog.Builder builder = new AlertDialog.Builder(TreeStrategyGameActivity.this, android.R.style.Theme_Translucent_NoTitleBar);
+					builder.setMessage("Are you sure you want to exit the game without saving it?");
+					builder.setCancelable(false);
+					builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							Intent intent = new Intent(TreeStrategyGameActivity.this, TreeStrategyMainActivity.class);
+							startActivity(intent);
+						}
+					});
+					builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.cancel();
+						}
+					});
+					AlertDialog alertDialog = builder.create();
+					alertDialog.show();
+				} else {
+					Intent intent = new Intent(TreeStrategyGameActivity.this, TreeStrategyMainActivity.class);
+					startActivity(intent);
+				}
+			} catch (JSONException e) {
+				Log.d("TreeStrategy", e.getMessage());
 			}
 		} else if (viewId == R.id.save_current_game_lai) {
 			toastAnnounce("save current game");
@@ -480,7 +526,12 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 	 */
 	public void saveCurrentGame() {
 		long curr_score = mCurrentAcres * mCurrentValuePerAcre + mCurrentCredits;
-		helper.saveTreeGame(createGameObject(), curr_score);
+//		helper.saveTreeGame(createGameObject(), curr_score);
+		try {
+			module.saveCurrentGame(createGameObject(), curr_score);
+		} catch (JSONException e) {
+			Log.d("TreeStrategy", e.getMessage());
+		}
 	}
 	
 	/**

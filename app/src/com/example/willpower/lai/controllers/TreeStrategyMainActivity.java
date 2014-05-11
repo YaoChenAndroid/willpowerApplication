@@ -2,9 +2,12 @@ package com.example.willpower.lai.controllers;
 
 import java.util.ArrayList;
 
+import org.json.JSONException;
+
 import com.example.willpower.controllers.R;
 import com.example.willpower.lai.SQLiteOpenHelper.TreeStrategyGameDatabaseHelper;
 import com.example.willpower.lai.models.TreeGameObject;
+import com.example.willpower.lai.modules.TreeStrategyGameDataModule;
 
 import android.os.Bundle;
 import android.annotation.SuppressLint;
@@ -13,6 +16,7 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources.NotFoundException;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -31,7 +35,8 @@ public class TreeStrategyMainActivity extends Activity {
 	private ImageButton mTreeStrategyBackToMain;
 	private ImageButton mTreeStrategyInstruction;
 	
-	private TreeStrategyGameDatabaseHelper db = new TreeStrategyGameDatabaseHelper(TreeStrategyMainActivity.this);
+//	private TreeStrategyGameDatabaseHelper db = new TreeStrategyGameDatabaseHelper(TreeStrategyMainActivity.this);
+	private TreeStrategyGameDataModule module = new TreeStrategyGameDataModule(this);
 	
 	public static final int START_TREE_ACTIVITY_ACTION = 2;
 	
@@ -57,24 +62,49 @@ public class TreeStrategyMainActivity extends Activity {
 		mTreeStrategyBackToMain = (ImageButton)findViewById(R.id.tree_strategy_back_to_main);
 		mTreeStrategyInstruction = (ImageButton)findViewById(R.id.tree_strategy_go_to_instruction);
 		
-		ArrayList<TreeGameObject> log = db.getAllTreeGameObject();
-		Log.d("TreeStrategy", "(Variable Value)check whether have saved game: " + log.size());
-		if (log.size() == 0) {
-			mTreeStrategyContinue.setBackground(getResources().getDrawable(R.drawable.tree_strategy_continue_disable_icon));
-			mTreeStrategyContinue.setClickable(false);
-		} else {
-			mTreeStrategyContinue.setBackground(getResources().getDrawable(R.drawable.tree_strategy_continue_icon));
-			mTreeStrategyContinue.setClickable(true);
-			mTreeStrategyContinue.setOnClickListener(new View.OnClickListener() {
+//		ArrayList<Long> scoreList = module.getCurrentScoreInfo();
+//		Log.d("TreeStrategy", String.valueOf(scoreList.get(0)));
+//		Log.d("TreeStrategy", String.valueOf(scoreList.get(1)));
+		
+//		ArrayList<TreeGameObject> log = db.getAllTreeGameObject();
+//		Log.d("TreeStrategy", "(Variable Value)check whether have saved game: " + log.size());
+//		if (log.size() == 0) {
+//			mTreeStrategyContinue.setBackground(getResources().getDrawable(R.drawable.tree_strategy_continue_disable_icon));
+//			mTreeStrategyContinue.setClickable(false);
+//		} else {
+//			mTreeStrategyContinue.setBackground(getResources().getDrawable(R.drawable.tree_strategy_continue_icon));
+//			mTreeStrategyContinue.setClickable(true);
+//			mTreeStrategyContinue.setOnClickListener(new View.OnClickListener() {
+//
+//				@Override
+//				public void onClick(View v) {
+//					Log.d("TreeStrategy", "(LoadModule)Continue game model.");
+//					Intent continueGame = new Intent(TreeStrategyMainActivity.this, TreeStrategyGameActivity.class);
+//					startActivityForResult(continueGame, START_TREE_STRATEGY_CONTINUE);
+//				}
+//				
+//			});
+//		}
+		try {
+			if (!module.canLoadGame()) {
+				mTreeStrategyContinue.setBackground(getResources().getDrawable(R.drawable.tree_strategy_continue_disable_icon));
+				mTreeStrategyContinue.setClickable(false);
+			} else {
+				mTreeStrategyContinue.setBackground(getResources().getDrawable(R.drawable.tree_strategy_continue_icon));
+				mTreeStrategyContinue.setClickable(true);
+				mTreeStrategyContinue.setOnClickListener(new View.OnClickListener() {
 
-				@Override
-				public void onClick(View v) {
-					Log.d("TreeStrategy", "(LoadModule)Continue game model.");
-					Intent continueGame = new Intent(TreeStrategyMainActivity.this, TreeStrategyGameActivity.class);
-					startActivityForResult(continueGame, START_TREE_STRATEGY_CONTINUE);
-				}
-				
-			});
+					@Override
+					public void onClick(View v) {
+						Log.d("TreeStrategy", "(LoadModule)Continue game model.");
+						Intent continueGame = new Intent(TreeStrategyMainActivity.this, TreeStrategyGameActivity.class);
+						startActivityForResult(continueGame, START_TREE_STRATEGY_CONTINUE);
+					}
+					
+				});
+			}
+		} catch (Exception e) {
+			Log.d("TreeStrategy", e.getMessage());
 		}
 		
 		mTreeStrategyNewGame.setOnClickListener(new View.OnClickListener() {
@@ -82,34 +112,66 @@ public class TreeStrategyMainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Log.d("TreeStrategy", "(LoadModule)Start new game model.");
-				ArrayList<TreeGameObject> log = db.getAllTreeGameObject();
-				if (log.size() == 0) {
-					Intent newGame = new Intent(TreeStrategyMainActivity.this, TreeStrategyGameActivity.class);
-					startActivityForResult(newGame, START_TREE_STRATEGY_NEW_GAME);
-				} else {
-					AlertDialog.Builder builder = new AlertDialog.Builder(TreeStrategyMainActivity.this, android.R.style.Theme_Translucent);
-					builder.setIcon(R.drawable.tree_dialog_icon);
-					builder.setMessage("Start a new game will lost your previous record, are you sure you want to start a new game?");
-					builder.setCancelable(false);
-					builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-						
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							db.clearTreeTables();
-							Intent newGame = new Intent(TreeStrategyMainActivity.this, TreeStrategyGameActivity.class);
-							startActivityForResult(newGame, START_TREE_STRATEGY_NEW_GAME);
-						}
-					});
-					builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-						
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							dialog.cancel();
-						}
-					});
-					AlertDialog alertDialog = builder.create();
-					alertDialog.getWindow().setGravity(Gravity.CENTER);
-					alertDialog.show();
+//				ArrayList<TreeGameObject> log = db.getAllTreeGameObject();
+//				if (log.size() == 0) {
+//					Intent newGame = new Intent(TreeStrategyMainActivity.this, TreeStrategyGameActivity.class);
+//					startActivityForResult(newGame, START_TREE_STRATEGY_NEW_GAME);
+//				} else {
+//					AlertDialog.Builder builder = new AlertDialog.Builder(TreeStrategyMainActivity.this, android.R.style.Theme_Translucent);
+//					builder.setIcon(R.drawable.tree_dialog_icon);
+//					builder.setMessage("Start a new game will lost your previous record, are you sure you want to start a new game?");
+//					builder.setCancelable(false);
+//					builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//						
+//						@Override
+//						public void onClick(DialogInterface dialog, int which) {
+//							db.clearTreeTables();
+//							Intent newGame = new Intent(TreeStrategyMainActivity.this, TreeStrategyGameActivity.class);
+//							startActivityForResult(newGame, START_TREE_STRATEGY_NEW_GAME);
+//						}
+//					});
+//					builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+//						
+//						@Override
+//						public void onClick(DialogInterface dialog, int which) {
+//							dialog.cancel();
+//						}
+//					});
+//					AlertDialog alertDialog = builder.create();
+//					alertDialog.getWindow().setGravity(Gravity.CENTER);
+//					alertDialog.show();
+//				}
+				try {
+					if (!module.canLoadGame()) {
+						Intent newGame = new Intent(TreeStrategyMainActivity.this, TreeStrategyGameActivity.class);
+						startActivityForResult(newGame, START_TREE_STRATEGY_NEW_GAME);
+					} else {
+						AlertDialog.Builder builder = new AlertDialog.Builder(TreeStrategyMainActivity.this, android.R.style.Theme_Translucent);
+						builder.setIcon(R.drawable.tree_dialog_icon);
+						builder.setMessage("Start a new game will lost your previous record, are you sure you want to start a new game?");
+						builder.setCancelable(false);
+						builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								module.clearRecords();
+								Intent newGame = new Intent(TreeStrategyMainActivity.this, TreeStrategyGameActivity.class);
+								startActivityForResult(newGame, START_TREE_STRATEGY_NEW_GAME);
+							}
+						});
+						builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.cancel();
+							}
+						});
+						AlertDialog alertDialog = builder.create();
+						alertDialog.getWindow().setGravity(Gravity.CENTER);
+						alertDialog.show();
+					}
+				} catch (JSONException e) {
+					Log.d("TreeStrategy", e.getMessage());
 				}
 			}
 			

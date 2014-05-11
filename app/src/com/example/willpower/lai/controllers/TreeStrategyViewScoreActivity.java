@@ -6,6 +6,7 @@ import com.example.willpower.controllers.R;
 import com.example.willpower.controllers.R.layout;
 import com.example.willpower.controllers.R.menu;
 import com.example.willpower.lai.SQLiteOpenHelper.TreeStrategyGameDatabaseHelper;
+import com.example.willpower.lai.modules.TreeStrategyGameDataModule;
 
 import android.os.Bundle;
 import android.annotation.SuppressLint;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 public class TreeStrategyViewScoreActivity extends Activity {
 
 	private TreeStrategyGameDatabaseHelper db = new TreeStrategyGameDatabaseHelper(this);
+	private TreeStrategyGameDataModule module = new TreeStrategyGameDataModule(this);
 	
 	private LinearLayout mTreeStrategyLinearLayout;
 	private ImageView mTreeStrategyCurrentScoreiv;
@@ -57,18 +59,21 @@ public class TreeStrategyViewScoreActivity extends Activity {
 	}
 	
 	public void printScore() {
-		ArrayList<Long> curr_score_list = db.getAllTreeGameScore();
-		ArrayList<Long> highest_score_list = db.getAllTreeGameHighestScore();
-		if (!curr_score_list.isEmpty() && curr_score_list.size() != 0) {
-			mTreeStrategyCurrentScoretv.setText(String.valueOf(curr_score_list.get(0)));
-		} else {
-			mTreeStrategyCurrentScoretv.setText("No current score");
-		}
-		if (!highest_score_list.isEmpty() && highest_score_list.size() != 0) {
-			mTreeStrategyHighestScoretv.setText(String.valueOf(highest_score_list.get(0)));
-		} else {
-			mTreeStrategyHighestScoretv.setText("No highest score");
-		}
+//		ArrayList<Long> curr_score_list = db.getAllTreeGameScore();
+//		ArrayList<Long> highest_score_list = db.getAllTreeGameHighestScore();
+//		if (!curr_score_list.isEmpty() && curr_score_list.size() != 0) {
+//			mTreeStrategyCurrentScoretv.setText(String.valueOf(curr_score_list.get(0)));
+//		} else {
+//			mTreeStrategyCurrentScoretv.setText("No current score");
+//		}
+//		if (!highest_score_list.isEmpty() && highest_score_list.size() != 0) {
+//			mTreeStrategyHighestScoretv.setText(String.valueOf(highest_score_list.get(0)));
+//		} else {
+//			mTreeStrategyHighestScoretv.setText("No highest score");
+//		}
+		ArrayList<Long> curr_score = module.getCurrentScoreInfo();
+		mTreeStrategyCurrentScoretv.setText(String.valueOf(curr_score.get(0)));
+		mTreeStrategyHighestScoretv.setText(String.valueOf(curr_score.get(1)));
 	}
 
 	@Override
