@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 import com.example.willpower.controllers.R;
 import com.example.willpower.models.User;
@@ -12,9 +13,13 @@ import com.example.willpower.models.userFriend;
 import com.example.willpower.yao.controllers.CurrentUserInfo;
 import com.example.willpower.yao.controllers.loginActivity;
 import com.example.willpower.yao.controllers.shareActivity;
+import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.parse.PushService;
 
 import android.os.AsyncTask;
@@ -94,9 +99,33 @@ public class MainActivity extends Activity {
 			@Override
 			//Yuxin Override this method
 			public void onClick(View v) {
+				final ParseUser currentUser=ParseUser.getCurrentUser();
+				//Toast.makeText(MainActivity.this, currentUser.getObjectId(), Toast.LENGTH_LONG).show();
+
+				ParseQuery<ParseObject> query = ParseQuery.getQuery("GameData");
+				query.whereEqualTo("userObjectId", currentUser.getObjectId());
+				query.findInBackground(new FindCallback<ParseObject>() {
+
+					@Override
+					public void done(List<ParseObject> arg0, ParseException arg1) {
+						// TODO Auto-generated method stub
+						int CBH=0;
+						if(arg0.size()==0){
+							ParseObject parseObject=new ParseObject("GameData");
+							parseObject.put("userObjectId", currentUser.getObjectId());
+							parseObject.put("CBH",0);
+							parseObject.saveInBackground();
+						}else{
+							CBH=(Integer)arg0.get(0).get("CBH");
+						}
+						Intent yuxin_brain_intent = new Intent(MainActivity.this, com.example.willpower.yuxin.controllers.ColorBrainActivity.class);
+						yuxin_brain_intent.putExtra("CBH", CBH);
+						startActivityForResult(yuxin_brain_intent, START_BRAIN_ACTIVITY_ACTION);
+					}
+					
+				});
 				//Toast.makeText(MainActivity.this, "Button1 is clicked, please override this method to activate game1Activity", 2000).show();
-				Intent yuxin_brain_intent = new Intent(MainActivity.this, com.example.willpower.yuxin.controllers.ColorBrainActivity.class);
-				startActivityForResult(yuxin_brain_intent, START_BRAIN_ACTIVITY_ACTION);
+
 			}
 		});
 		ib2.setOnClickListener(new View.OnClickListener() {

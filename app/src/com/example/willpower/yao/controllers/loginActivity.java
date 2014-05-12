@@ -4,8 +4,10 @@ import java.util.List;
 
 import com.example.willpower.controllers.R;
 import com.example.willpower.models.User;
+import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -38,7 +40,7 @@ public class loginActivity extends Activity{
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				try {
+				/*try {
 					if(valid())
 					{
 			            ParseQuery<User> userQuery = User.getQuery();   
@@ -64,8 +66,21 @@ public class loginActivity extends Activity{
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					Log.e(TAG, e.getMessage());
-				}
-
+				}*/
+				valid();
+				ParseUser.logInInBackground(emailStr, passwordStr, new LogInCallback() {
+					
+					@Override
+					public void done(ParseUser user, ParseException e) {
+						// TODO Auto-generated method stub
+						if(user!=null){
+							Toast.makeText(loginActivity.this, "welcome back! "+emailStr, Toast.LENGTH_LONG).show();
+							finish();
+						}else{
+							Toast.makeText(loginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+						}
+					}
+				});
 				
 			}
 		});
@@ -82,14 +97,14 @@ public class loginActivity extends Activity{
 		});
 	}
 	//check the textbox validation
-    private boolean valid() throws ParseException
+    private boolean valid()// throws ParseException
     {
 		EditText emailAddress = (EditText)findViewById(R.id.editTextLoginEmail);
 		emailStr = emailAddress.getText().toString().trim();
 		EditText password = (EditText)findViewById(R.id.editTextLoginPassword);
 		passwordStr= password.getText().toString().trim();
 		
-		
+		/*
         if(emailStr.length() == 0)
         {
         	setRequired(emailAddress, getString(R.string.yao_login_i_empty));
@@ -100,7 +115,7 @@ public class loginActivity extends Activity{
         {
             this.setRequired(password, this.getString(R.string.yao_login_i_empty) );
             return false;
-        }
+        }*/
         return true;
     }
     //show the animation of error message

@@ -1,13 +1,21 @@
 package com.example.willpower.yuxin.controllers;
 
+import java.util.List;
+
+import com.example.willpower.controllers.MainActivity;
 import com.example.willpower.controllers.R;
 import com.example.willpower.yuxin.models.Question;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -41,7 +49,8 @@ public class ColorBrainActivity extends Activity {
 	    //SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 	    //highestScore=settings.getInt("highestScore", 0);
 		
-		resetHighestScore();
+		//resetHighestScore();
+		highestScore=(Integer)getIntent().getExtras().get("CBH");
 		setupUI();
 		refreshUI();
 	    //timerCount = new MyCount(timelimit, 1000);
@@ -172,7 +181,7 @@ public class ColorBrainActivity extends Activity {
 	    } 
 	  
 	  
-	  private void resetHighestScore(){
+	 /* private void resetHighestScore(){
 		  ParseUser currentUser = ParseUser.getCurrentUser();
 		  if (currentUser == null) {
 			  SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
@@ -180,14 +189,26 @@ public class ColorBrainActivity extends Activity {
 		  } else {
 			  highestScore=currentUser.getInt("CBHighestScore");
 		  }
-	  }
+	  }*/
 	  
 	  private void updateHighestScore(int score){
-		  ParseUser currentUser = ParseUser.getCurrentUser();
+		  highestScore=score;
+		  final ParseUser currentUser = ParseUser.getCurrentUser();
 		  if (currentUser == null) {
 			  getSharedPreferences(PREFS_NAME, 0).edit().putInt("highestScore", score).commit();
 		  } else {
-			  currentUser.put("highestScore", score);
+				ParseQuery<ParseObject> query = ParseQuery.getQuery("GameData");
+				query.whereEqualTo("userObjectId", currentUser.getObjectId());
+				query.findInBackground(new FindCallback<ParseObject>() {
+
+					@Override
+					public void done(List<ParseObject> arg0, ParseException arg1) {
+						// TODO Auto-generated method stub
+						arg0.get(0).put("CBH", highestScore);
+						arg0.get(0).saveInBackground();
+					}
+					
+				});
 		  }		  
 	  }
 }

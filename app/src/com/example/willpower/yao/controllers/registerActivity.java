@@ -8,8 +8,11 @@ import com.example.willpower.models.friendLoc;
 import com.parse.FindCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.parse.SignUpCallback;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -92,6 +95,18 @@ public class registerActivity extends Activity{
 			}
         	
         });
+        ParseUser parseUser=new ParseUser();
+        parseUser.setUsername(userNameStr);
+        parseUser.setPassword(passwordStr);
+        
+        parseUser.signUpInBackground(new SignUpCallback() {
+			
+			@Override
+			public void done(ParseException arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
         Intent intent = new Intent();
         setResult(this.RESULT_OK, intent);
         
