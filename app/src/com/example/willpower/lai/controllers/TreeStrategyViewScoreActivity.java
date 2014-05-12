@@ -3,8 +3,6 @@ package com.example.willpower.lai.controllers;
 import java.util.ArrayList;
 
 import com.example.willpower.controllers.R;
-import com.example.willpower.controllers.R.layout;
-import com.example.willpower.controllers.R.menu;
 import com.example.willpower.lai.SQLiteOpenHelper.TreeStrategyGameDatabaseHelper;
 import com.example.willpower.lai.modules.TreeStrategyGameDataModule;
 import com.parse.ParseException;

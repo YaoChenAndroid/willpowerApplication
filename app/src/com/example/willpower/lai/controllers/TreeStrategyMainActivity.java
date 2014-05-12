@@ -1,22 +1,14 @@
 package com.example.willpower.lai.controllers;
 
-import java.util.ArrayList;
-
-import org.json.JSONException;
-
 import com.example.willpower.controllers.R;
-import com.example.willpower.lai.SQLiteOpenHelper.TreeStrategyGameDatabaseHelper;
-import com.example.willpower.lai.models.TreeGameObject;
 import com.example.willpower.lai.modules.TreeStrategyGameDataModule;
 
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources.NotFoundException;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;

@@ -1,13 +1,9 @@
 package com.example.willpower.lai.controllers;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.json.JSONException;
-
 import com.example.willpower.controllers.R;
-import com.example.willpower.lai.SQLiteOpenHelper.TreeStrategyGameDatabaseHelper;
 import com.example.willpower.lai.models.TreeGameObject;
 import com.example.willpower.lai.modules.TreeStrategyGameDataModule;
 
