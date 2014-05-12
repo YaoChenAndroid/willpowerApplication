@@ -106,6 +106,7 @@ public class registerActivity extends Activity{
 				ParseUser currentUser=ParseUser.getCurrentUser();
 				if(currentUser!=null){
 					ParseObject parseObject=new ParseObject("GameData");
+					parseObject.put("CBH", 0);
 					parseObject.put("userObjectId", currentUser.getObjectId());
 					parseObject.put("Goal", goals);
 					parseObject.put("TreeSavedGame", "");
