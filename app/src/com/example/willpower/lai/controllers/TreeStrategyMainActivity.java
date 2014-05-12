@@ -170,7 +170,7 @@ public class TreeStrategyMainActivity extends Activity {
 						alertDialog.getWindow().setGravity(Gravity.CENTER);
 						alertDialog.show();
 					}
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					Log.d("TreeStrategy", e.getMessage());
 				}
 			}

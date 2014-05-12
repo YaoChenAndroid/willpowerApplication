@@ -122,7 +122,7 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 				this.mCurrentCredits = tgo.getCurrentCredits();
 			}
 			module.clearRecords();
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			Log.d("TreeStrategy", e.getMessage());
 		}
 	}
@@ -205,7 +205,7 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 					Intent intent = new Intent(TreeStrategyGameActivity.this, TreeStrategyMainActivity.class);
 					startActivity(intent);
 				}
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				Log.d("TreeStrategy", e.getMessage());
 			}
 		} else if (viewId == R.id.save_current_game_lai) {

@@ -1,6 +1,7 @@
 package com.example.willpower.lai.modules;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,6 +10,10 @@ import android.content.Context;
 
 import com.example.willpower.lai.SQLiteOpenHelper.TreeStrategyGameDatabaseHelper;
 import com.example.willpower.lai.models.TreeGameObject;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 /**
@@ -34,7 +39,7 @@ public class TreeStrategyGameDataModule {
 	 * @throws JSONException
 	 */
 	
-	public void saveCurrentGame(TreeGameObject gameObject, long score) throws JSONException {
+	public void saveCurrentGame(TreeGameObject gameObject, final long score) throws JSONException {
 		ParseUser curr_user = ParseUser.getCurrentUser();
 		if (curr_user != null) {
 			JSONObject jsonObject = new JSONObject();
@@ -44,15 +49,31 @@ public class TreeStrategyGameDataModule {
 			jsonObject.put("CurrentCredits", gameObject.getCurrentCredits());
 			jsonObject.put("CurrentMaintainPerAcre", gameObject.getCurrentMaintainPerAcre());
 			jsonObject.put("CurrentValuePerAcre", gameObject.getCurrentValuePerAcre());
-			String curr_state = jsonObject.toString();
-			curr_user.put("TreeSavedGame", curr_state);
-			curr_user.put("TreeCurrentScore", score);
-			Long curr_highest_score = curr_user.getLong("TreeHighest");
-			if (curr_highest_score != null && curr_highest_score < score) {
-				curr_user.put("TreeHighest", score);
-			} else {
-				curr_user.put("TreeHighest", score);
-			}
+			final String curr_state = jsonObject.toString();
+//			curr_user.put("TreeSavedGame", curr_state);
+//			curr_user.put("TreeCurrentScore", score);
+//			Long curr_highest_score = curr_user.getLong("TreeHighest");
+//			if (curr_highest_score != null && curr_highest_score < score) {
+//				curr_user.put("TreeHighest", score);
+//			} else {
+//				curr_user.put("TreeHighest", score);
+//			}
+			ParseQuery<ParseObject> query = ParseQuery.getQuery("GameData");
+			query.whereEqualTo("userObjectId", curr_user.getObjectId());
+			query.findInBackground(new FindCallback<ParseObject>() {
+
+				@Override
+				public void done(List<ParseObject> arg0, ParseException arg1) {
+					arg0.get(0).put("TreeSavedGame", curr_state);
+					arg0.get(0).put("TreeCurrentScore", score);
+					Long curr_highest_score = arg0.get(0).getLong("TreeHighestScore");
+					if ((curr_highest_score == null) || (curr_highest_score != null && curr_highest_score < score)) {
+						arg0.get(0).put("TreeHighestScore", score);
+						arg0.get(0).saveInBackground();
+					}
+				}
+				
+			});
 		} else {
 			db.saveTreeGame(gameObject, score);
 		}
@@ -62,12 +83,26 @@ public class TreeStrategyGameDataModule {
 	 * Load current game and get game object
 	 * @return regular TreeGameObject to load current game, null if no records
 	 * @throws JSONException
+	 * @throws ParseException 
 	 */
 	
-	public TreeGameObject loadCurrentGame() throws JSONException {
+	public TreeGameObject loadCurrentGame() throws JSONException, ParseException {
 		ParseUser curr_user = ParseUser.getCurrentUser();
 		if (curr_user != null) {
-			String curr_savedGame = curr_user.getString("TreeSavedGame");
+			ParseQuery<ParseObject> query = ParseQuery.getQuery("GameData");
+			query.whereEqualTo("userObjectId", curr_user.getObjectId());
+//			query.findInBackground(new FindCallback<ParseObject>() {
+//
+//				@Override
+//				public void done(List<ParseObject> arg0, ParseException arg1) {
+//					curr_savedGame = arg0.get(0).getString("TreeSavedGame");
+//					
+//				}
+//				
+//			});
+			List<ParseObject> lists=query.find();
+			String curr_savedGame=lists.get(0).getString("TreeSavedGame");
+			//String curr_savedGame = query.get(curr_user.getObjectId()).getString("TreeSavedGame");
 			if (curr_savedGame != null) {
 				JSONObject jsonObject = new JSONObject(curr_savedGame);
 				return new TreeGameObject(jsonObject.getLong("CostPerAcre"), jsonObject.getDouble("CurrentAcresIncreaseRate"), 
@@ -128,8 +163,20 @@ public class TreeStrategyGameDataModule {
 	public void clearRecords() {
 		ParseUser curr_user = ParseUser.getCurrentUser();
 		if (curr_user != null) {
-			curr_user.put("TreeCurrentScore", 0);
-			curr_user.put("TreeSavedGame", null);
+//			curr_user.put("TreeCurrentScore", 0);
+//			curr_user.put("TreeSavedGame", null);
+			ParseQuery<ParseObject> query = ParseQuery.getQuery("GameData");
+			query.whereEqualTo("userObjectId", curr_user.getObjectId());
+			query.findInBackground(new FindCallback<ParseObject>() {
+
+				@Override
+				public void done(List<ParseObject> arg0, ParseException arg1) {
+					arg0.get(0).put("TreeSavedGame", null);
+					arg0.get(0).put("TreeCurrentScore", 0);
+					arg0.get(0).saveInBackground();
+				}
+				
+			});
 		}
 		db.clearTreeTables();
 	}
@@ -138,8 +185,9 @@ public class TreeStrategyGameDataModule {
 	 * public interface to return whether can load a game
 	 * @return true if there exists an object
 	 * @throws JSONException 
+	 * @throws ParseException 
 	 */
-	public boolean canLoadGame() throws JSONException {
+	public boolean canLoadGame() throws JSONException, ParseException {
 		TreeGameObject tgo = loadCurrentGame();
 		if (tgo != null) {
 			return true;
