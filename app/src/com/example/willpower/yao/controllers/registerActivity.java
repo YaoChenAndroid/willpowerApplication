@@ -112,6 +112,7 @@ public class registerActivity extends Activity{
 					parseObject.put("TreeSavedGame", "");
 					parseObject.put("TreeHighestScore", 0);
 					parseObject.put("TreeCurrentScore", 0);
+					CurrentUserInfo.getInstance().UserGoal=goals;
 					parseObject.saveInBackground();
 				}
 			}
