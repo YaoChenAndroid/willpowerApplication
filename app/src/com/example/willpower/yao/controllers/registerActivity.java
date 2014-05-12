@@ -109,6 +109,9 @@ public class registerActivity extends Activity{
 					ParseObject parseObject=new ParseObject("GameData");
 					parseObject.put("userObjectId", currentUser.getObjectId());
 					parseObject.put("Goal", goals);
+					parseObject.put("TreeSavedGame", "new");
+					parseObject.put("TreeHighestScore", 1700);
+					parseObject.put("TreeCurrentScore", 1250);
 					parseObject.saveInBackground();
 				}
 			}

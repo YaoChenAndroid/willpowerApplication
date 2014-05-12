@@ -529,7 +529,7 @@ public class TreeStrategyGameActivity extends Activity implements OnClickListene
 //		helper.saveTreeGame(createGameObject(), curr_score);
 		try {
 			module.saveCurrentGame(createGameObject(), curr_score);
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			Log.d("TreeStrategy", e.getMessage());
 		}
 	}

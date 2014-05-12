@@ -7,11 +7,13 @@ import com.example.willpower.controllers.R.layout;
 import com.example.willpower.controllers.R.menu;
 import com.example.willpower.lai.SQLiteOpenHelper.TreeStrategyGameDatabaseHelper;
 import com.example.willpower.lai.modules.TreeStrategyGameDataModule;
+import com.parse.ParseException;
 
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
@@ -56,6 +58,7 @@ public class TreeStrategyViewScoreActivity extends Activity {
 		});
 		
 		printScore();
+		
 	}
 	
 	public void printScore() {
@@ -71,9 +74,14 @@ public class TreeStrategyViewScoreActivity extends Activity {
 //		} else {
 //			mTreeStrategyHighestScoretv.setText("No highest score");
 //		}
-		ArrayList<Long> curr_score = module.getCurrentScoreInfo();
-		mTreeStrategyCurrentScoretv.setText(String.valueOf(curr_score.get(0)));
-		mTreeStrategyHighestScoretv.setText(String.valueOf(curr_score.get(1)));
+		ArrayList<Long> curr_score;
+		try {
+			curr_score = module.getCurrentScoreInfo();
+			mTreeStrategyCurrentScoretv.setText(String.valueOf(curr_score.get(0)));
+			mTreeStrategyHighestScoretv.setText(String.valueOf(curr_score.get(1)));
+		} catch (ParseException e) {
+			Log.d("TreeStrategy", e.getMessage());
+		}
 	}
 
 	@Override
