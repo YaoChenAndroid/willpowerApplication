@@ -2,8 +2,10 @@ package com.example.willpower.yao.controllers;
 
 import java.util.List;
 
+import com.example.willpower.controllers.MainActivity;
 import com.example.willpower.controllers.R;
 import com.example.willpower.models.User;
+import com.example.willpower.yuxin.controllers.logoutActivity;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -75,7 +77,9 @@ public class loginActivity extends Activity{
 						// TODO Auto-generated method stub
 						if(user!=null){
 							Toast.makeText(loginActivity.this, "welcome back! "+emailStr, Toast.LENGTH_LONG).show();
-							finish();
+							Intent temp = new Intent(loginActivity.this, MainActivity.class);
+							startActivity(temp);
+						
 						}else{
 							Toast.makeText(loginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
 						}

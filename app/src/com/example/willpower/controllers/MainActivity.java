@@ -13,6 +13,7 @@ import com.example.willpower.models.userFriend;
 import com.example.willpower.yao.controllers.CurrentUserInfo;
 import com.example.willpower.yao.controllers.loginActivity;
 import com.example.willpower.yao.controllers.shareActivity;
+import com.example.willpower.yuxin.controllers.logoutActivity;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
@@ -101,29 +102,35 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				final ParseUser currentUser=ParseUser.getCurrentUser();
 				//Toast.makeText(MainActivity.this, currentUser.getObjectId(), Toast.LENGTH_LONG).show();
-
-				ParseQuery<ParseObject> query = ParseQuery.getQuery("GameData");
-				query.whereEqualTo("userObjectId", currentUser.getObjectId());
-				query.findInBackground(new FindCallback<ParseObject>() {
-
-					@Override
-					public void done(List<ParseObject> arg0, ParseException arg1) {
-						// TODO Auto-generated method stub
-						int CBH=0;
-						if(arg0.size()==0){
-							ParseObject parseObject=new ParseObject("GameData");
-							parseObject.put("userObjectId", currentUser.getObjectId());
-							parseObject.put("CBH",0);
-							parseObject.saveInBackground();
-						}else{
-							CBH=(Integer)arg0.get(0).get("CBH");
+				if(currentUser!=null){
+					ParseQuery<ParseObject> query = ParseQuery.getQuery("GameData");
+					query.whereEqualTo("userObjectId", currentUser.getObjectId());
+					query.findInBackground(new FindCallback<ParseObject>() {
+	
+						@Override
+						public void done(List<ParseObject> arg0, ParseException arg1) {
+							// TODO Auto-generated method stub
+							int CBH=0;
+							if(arg0.size()==0){
+								ParseObject parseObject=new ParseObject("GameData");
+								parseObject.put("userObjectId", currentUser.getObjectId());
+								parseObject.put("CBH",0);
+								parseObject.saveInBackground();
+							}else{
+								CBH=(Integer)arg0.get(0).get("CBH");
+							}
+							Intent yuxin_brain_intent = new Intent(MainActivity.this, com.example.willpower.yuxin.controllers.ColorBrainActivity.class);
+							yuxin_brain_intent.putExtra("CBH", CBH);
+							startActivityForResult(yuxin_brain_intent, START_BRAIN_ACTIVITY_ACTION);
 						}
-						Intent yuxin_brain_intent = new Intent(MainActivity.this, com.example.willpower.yuxin.controllers.ColorBrainActivity.class);
-						yuxin_brain_intent.putExtra("CBH", CBH);
-						startActivityForResult(yuxin_brain_intent, START_BRAIN_ACTIVITY_ACTION);
-					}
-					
-				});
+						
+					});
+				}
+				else{
+					Intent yuxin_brain_intent = new Intent(MainActivity.this, com.example.willpower.yuxin.controllers.ColorBrainActivity.class);
+					yuxin_brain_intent.putExtra("CBH", 0);
+					startActivityForResult(yuxin_brain_intent, START_BRAIN_ACTIVITY_ACTION);
+				}
 				//Toast.makeText(MainActivity.this, "Button1 is clicked, please override this method to activate game1Activity", 2000).show();
 
 			}
@@ -141,22 +148,34 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 //				Toast.makeText(MainActivity.this, "Button3 is clicked, please override this method to activate game3Activity", 2000).show();
-				Intent temp = new Intent(MainActivity.this, loginActivity.class);
-				startActivity(temp);
+				if (ParseUser.getCurrentUser()!=null) {
+					Intent temp = new Intent(MainActivity.this, logoutActivity.class);
+					startActivity(temp);
+				} else {
+					Intent temp = new Intent(MainActivity.this, loginActivity.class);
+					startActivity(temp);
+				}
+
 			}
 		});
 		ib4.setOnClickListener(new View.OnClickListener() {
 			@Override
 			//Yao Override this method
 			public void onClick(View v) {
-		        CurrentUserInfo user = CurrentUserInfo.getInstance();
+		        /*CurrentUserInfo user = CurrentUserInfo.getInstance();
 		        if(user.UserId.length() == 0){
 					Toast.makeText(MainActivity.this, MainActivity.this.getResources().getString(R.string.yao_login_i_email_please), Toast.LENGTH_LONG).show();
 
 		        }else{
 					Intent temp = new Intent(MainActivity.this,shareActivity.class);
 					startActivity(temp);
-		        }
+		        }*/
+				if (ParseUser.getCurrentUser()==null) {
+					Toast.makeText(MainActivity.this, MainActivity.this.getResources().getString(R.string.yao_login_i_email_please), Toast.LENGTH_LONG).show();
+				} else {
+					Intent temp = new Intent(MainActivity.this,shareActivity.class);
+					startActivity(temp);
+				}
 
 			}
 		});

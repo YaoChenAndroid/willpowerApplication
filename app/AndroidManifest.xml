@@ -113,6 +113,10 @@
             android:label="@string/yao_social_activity_self_login" >
         </activity>
         <activity
+            android:name="com.example.willpower.yuxin.controllers.logoutActivity"
+            android:label="logout!" >
+        </activity>
+        <activity
             android:name="com.example.willpower.yao.controllers.registerActivity"
             android:label="@string/yao_social_activity_register" >
         </activity>

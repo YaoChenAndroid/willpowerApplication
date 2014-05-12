@@ -19,8 +19,8 @@
         
         <string name="yao_social_infor_twitter_suggestion_friend_message">The follow twitter user feel good in your goal. You will be benifit from them</string>
         
-        <string name="yao_login_email">Email Address:</string>
-        <string name="yao_login_name">Name:</string>
+        <string name="yao_login_email">Email:</string>
+        <string name="yao_login_name">Username:</string>
         <string name="yao_login_goal">Goal:</string>
         <string name="yao_login_password">Password:</string>
         <string name="yao_login_confirm_password">Comfirm Password:</string>
