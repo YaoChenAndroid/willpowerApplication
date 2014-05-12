@@ -104,7 +104,13 @@ public class registerActivity extends Activity{
 			@Override
 			public void done(ParseException arg0) {
 				// TODO Auto-generated method stub
-				
+				ParseUser currentUser=ParseUser.getCurrentUser();
+				if(currentUser!=null){
+					ParseObject parseObject=new ParseObject("GameData");
+					parseObject.put("userObjectId", currentUser.getObjectId());
+					parseObject.put("Goal", goals);
+					parseObject.saveInBackground();
+				}
 			}
 		});
         Intent intent = new Intent();

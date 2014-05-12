@@ -6,8 +6,10 @@ import com.example.willpower.controllers.MainActivity;
 import com.example.willpower.controllers.R;
 import com.example.willpower.models.User;
 import com.example.willpower.yuxin.controllers.logoutActivity;
+import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -76,6 +78,17 @@ public class loginActivity extends Activity{
 					public void done(ParseUser user, ParseException e) {
 						// TODO Auto-generated method stub
 						if(user!=null){
+							ParseQuery<ParseObject> query = ParseQuery.getQuery("GameData");
+							query.whereEqualTo("userObjectId", user.getObjectId());
+							query.findInBackground(new FindCallback<ParseObject>() {
+
+								@Override
+								public void done(List<ParseObject> arg0, ParseException arg1) {
+									// TODO Auto-generated method stub
+									CurrentUserInfo.getInstance().UserGoal=arg0.get(0).getString("Goal");
+								}
+								
+							});
 							Toast.makeText(loginActivity.this, "welcome back! "+emailStr, Toast.LENGTH_LONG).show();
 							Intent temp = new Intent(loginActivity.this, MainActivity.class);
 							startActivity(temp);
