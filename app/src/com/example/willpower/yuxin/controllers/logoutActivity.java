@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.example.willpower.controllers.MainActivity;
 import com.example.willpower.controllers.R;
-import com.example.willpower.models.User;
 import com.example.willpower.yao.controllers.loginActivity;
 import com.parse.LogInCallback;
 import com.parse.ParseException;

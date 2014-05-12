@@ -3,7 +3,6 @@ package com.example.willpower.yao.controllers;
 import java.util.List;
 
 import com.example.willpower.controllers.R;
-import com.example.willpower.models.User;
 import com.example.willpower.models.friendLoc;
 import com.parse.FindCallback;
 import com.parse.ParseACL;
@@ -74,7 +73,7 @@ public class registerActivity extends Activity{
 	//save register information to the web server
 	private void saveUser() {
 		// TODO Auto-generated method stub
-        final User user = new User();
+        /*final User user = new User();
         user.setEmail(emailStr);
         user.setName(userNameStr);
         user.setPassword(passwordStr);
@@ -94,7 +93,7 @@ public class registerActivity extends Activity{
 		        temp.UserGoal = goals;
 			}
         	
-        });
+        });*/
         ParseUser parseUser=new ParseUser();
         parseUser.setUsername(userNameStr);
         parseUser.setPassword(passwordStr);
@@ -136,9 +135,9 @@ public class registerActivity extends Activity{
         	return false;
         }
         else{
-            ParseQuery<User> userQuery = User.getQuery();   
+            ParseQuery<ParseUser> userQuery = ParseUser.getQuery();   
             userQuery.whereEqualTo("Email", emailStr);
-            List<User> userList = userQuery.find();
+            List<ParseUser> userList = userQuery.find();
             if(userList.size() != 0)
             {
             	setRequired(emailAddress, getString(R.string.yao_login_i_email_registed));

@@ -1,6 +1,5 @@
 package com.example.willpower.controllers;
 
-import com.example.willpower.models.User;
 import com.example.willpower.models.friendLoc;
 import com.example.willpower.models.userFriend;
 import com.parse.Parse;
@@ -25,7 +24,6 @@ public class Application extends android.app.Application {
 	
     ParseObject.registerSubclass(friendLoc.class);
     ParseObject.registerSubclass(userFriend.class);
-    ParseObject.registerSubclass(User.class);
 	PushService.setDefaultPushCallback(this, MainActivity.class);
   }
 }

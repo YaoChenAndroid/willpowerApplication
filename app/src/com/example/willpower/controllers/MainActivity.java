@@ -7,7 +7,6 @@ import java.io.OutputStream;
 import java.util.List;
 
 import com.example.willpower.controllers.R;
-import com.example.willpower.models.User;
 import com.example.willpower.models.friendLoc;
 import com.example.willpower.models.userFriend;
 import com.example.willpower.yao.controllers.CurrentUserInfo;

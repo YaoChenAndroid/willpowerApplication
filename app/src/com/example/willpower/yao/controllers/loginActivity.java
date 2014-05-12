@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.example.willpower.controllers.MainActivity;
 import com.example.willpower.controllers.R;
-import com.example.willpower.models.User;
 import com.example.willpower.yuxin.controllers.logoutActivity;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
