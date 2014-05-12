@@ -31,7 +31,9 @@ import com.parse.FindCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import android.app.Dialog;
@@ -50,6 +52,7 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 	  private final static String TAG = "googleMapActivity";
 	  private String username;
 	  private String curUserID;
+	  private String userGoal;
 	  private String friendID;
 	  
 	  //parse data
@@ -88,9 +91,22 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_social_google_map_yao);
-		CurrentUserInfo temp = CurrentUserInfo.getInstance();
+		/*CurrentUserInfo temp = CurrentUserInfo.getInstance();
 		username = temp.userName;
 		curUserID = temp.UserId;
+		userGoal = temp.UserGoal;*/
+		
+		ParseUser currentUser=ParseUser.getCurrentUser();
+		username=currentUser.getUsername();
+		curUserID=currentUser.getObjectId();
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("GameData");
+		query.whereEqualTo("userObjectId", currentUser.getObjectId());
+		try {
+			userGoal=(String)query.find().get(0).get("Goal");
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//initial service, the service used to get current location
 		locationRequest = LocationRequest.create();
 		locationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
@@ -109,8 +125,43 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 			@Override
 			public void onCameraChange(CameraPosition arg0) {
 				// TODO Auto-generated method stub
-				doMapQuery();
+				//doMapQuery();
 			}	    	
+	    });
+	    map.setOnMarkerClickListener(new OnMarkerClickListener(){
+
+			@Override
+			public boolean onMarkerClick(final Marker arg0) {
+				// TODO Auto-generated method stub
+				
+				String key = null;
+				for(Map.Entry<String, Marker> entry: mapMarkers.entrySet()){
+					if(arg0.equals(entry.getValue()))
+					{
+						key = entry.getKey();
+						break;
+					}
+				}
+				if(key != null)
+				{
+				      ParseQuery<friendLoc> locQuery = friendLoc.getQuery();   
+				      locQuery.whereEqualTo("objectId", key);
+
+				      try {
+				    	  List<friendLoc> argList = locQuery.find();
+							String goal = argList.get(0).getUserGoal();
+							goal = "Goals @" + arg0.getTitle() +": " + goal;
+							arg0.setTitle(goal);
+					} catch (ParseException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
+				}
+				
+				return false;
+			}
+	    	
 	    });
 	    map.setOnInfoWindowClickListener(this);
 	    if(GooglePlayServicesUtil.isGooglePlayServicesAvailable( getApplicationContext() ) == ConnectionResult.SUCCESS)
@@ -238,7 +289,7 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 	{
         //save current location to parse
         ParseQuery<friendLoc> locQuery = friendLoc.getQuery();   
-        locQuery.whereEqualTo("UserID", curUserID);
+        locQuery.whereEqualTo("UserID", ParseUser.getCurrentUser().getObjectId());
         locQuery.findInBackground(new FindCallback<friendLoc>(){
 
 			@Override
@@ -270,6 +321,7 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 			        loc.setLocation(myPoint);
 			        loc.setText(username);
 			        loc.setUserID(curUserID);
+			        loc.setUserGoal(userGoal);
 			        ParseACL acl = new ParseACL();
 			        acl.setPublicReadAccess(true);
 			        acl.setPublicWriteAccess(true);
@@ -484,6 +536,7 @@ public class googleMapActivity extends FragmentActivity implements LocationListe
 			userFriend friend = new userFriend();
 	        friend.setUserID(curUserID);
 	        friend.setFriendID(friendID);
+	        
 	        ParseACL acl = new ParseACL();
 	        acl.setPublicReadAccess(true);
 	        acl.setPublicWriteAccess(true);

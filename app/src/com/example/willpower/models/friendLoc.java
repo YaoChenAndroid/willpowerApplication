@@ -32,6 +32,14 @@ public class friendLoc extends ParseObject{
 	{
 		put("location", value);
 	}
+	public String getUserGoal()
+	{
+		return getString("UserGoal");
+	}
+	public void setUserGoal(String goal)
+	{
+		put("UserGoal", goal);
+	}
 	public static ParseQuery<friendLoc> getQuery()
 	{
 		return ParseQuery.getQuery(friendLoc.class);
